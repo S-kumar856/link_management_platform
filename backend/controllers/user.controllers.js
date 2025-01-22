@@ -47,7 +47,24 @@ exports.registerUser = async (req, res) => {
     }catch(error){
         res.status(500).json({msg: 'Error  in registering user'});
     }
-}
+};
+
+// get all users
+
+exports.getUsers = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).select('-password');
+        if(!user){
+            return res.status(400).json({msg: 'User not found'});
+        }
+        res.status(200).json({success: true, user});
+    } catch (error) {
+        res.status(500).json({msg: 'Error in getting users'});
+        
+    }
+};
+
 
 
 // login user
@@ -79,10 +96,14 @@ exports.loginUser = async (req, res) => {
             {expiresIn: '24h',
 
             });
+
+            res.cookie("token",token)
+            res.status(200).json({success: true, message: 'User logged in successfully', token})
             
 
     } catch (error) {
-        console.log(error);
+        console.error('Error in logged in:', error.message);
+        res.status(500).json({success: false, message: 'Internal server error'});
     }
 };
 

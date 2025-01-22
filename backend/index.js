@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 // Route middleware for user authentication (register/login)
 app.use('/api/user', userRoute);
 
+
 app.listen(PORT, ()=>{
     mongoose.connect(process.env.MONGO_URI)
     .then(()=> 
