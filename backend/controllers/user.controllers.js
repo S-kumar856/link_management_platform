@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator');
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-    const { name, username, email, password } = req.body;
+    const { name, mobile, email, password } = req.body;
 
     // validation results
 
@@ -29,7 +29,7 @@ exports.registerUser = async (req, res) => {
         // create a new user
         user = new User({
             name,
-            username,
+            mobile,
             email,
             password: hashedPassword
         });
@@ -51,7 +51,7 @@ exports.registerUser = async (req, res) => {
 
 // update user
 exports.updateUser = async (req, res) => {
-    const { name, username, email, oldPassword, newPassword } = req.body;
+    const { name, mobile, email, oldPassword, newPassword } = req.body;
     const userId = req.user.id;
     console.log(userId);
 
@@ -71,8 +71,12 @@ exports.updateUser = async (req, res) => {
         }
 
         // update username if provided
-        if (username && username !== user.username) {
-            user.username = username;
+        if (mobile && mobile !== user.mobile) {
+            const existingMobile = await User.findOne({ mobile });
+            if(existingMobile){
+                return res.status(400).json({ success: false, msg: 'Mobile number already exists' });
+            }
+            user.mobile = mobile;
         }
 
         // update email if provided
@@ -85,21 +89,22 @@ exports.updateUser = async (req, res) => {
         }
 
         // Update password if both old and new passwords are provide
-        if (oldPassword && newPassword) {
-            const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
-            if (!isPasswordMatch) {
-                return res.status(400)
-                    .json({ success: false, msg: 'Invalid old password' });
-            }
+        // if (oldPassword && newPassword) {
+        //     const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+        //     if (!isPasswordMatch) {
+        //         return res.status(400)
+        //             .json({ success: false, msg: 'Invalid old password' });
+        //     }
 
-            if (oldPassword === newPassword) {
-                return res.status(400)
-                    .json({ success: false, msg: 'New password must be different from old password' });
-            }
+        //     if (oldPassword === newPassword) {
+        //         return res.status(400)
+        //             .json({ success: false, msg: 'New password must be different from old password' });
+        //     }
 
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(newPassword, salt);
-        }
+        //     const salt = await bcrypt.genSalt(10);
+        //     user.password = await bcrypt.hash(newPassword, salt);
+        // }
+        
         // save the user
         await user.save();
         res.status(200).json({ success: true, msg: 'User updated successfully' });
@@ -136,7 +141,7 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByIdAndDelete(userId);
 
         if (!user) {
-            return res.status(400).json({ msg: 'User not found' });
+            return res.status(400).json({ success:false, msg: 'User not found' });
         }
 
         res.status(200).json({ success: true, msg: 'User deleted successfully' });
@@ -145,26 +150,6 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ success: false, msg: 'Internal server error' });
     }
 };
-
-// exports.deleteUser = async (req, res) => {
-//     const userId = req.user.id;
-//     console.log(userId);
-//     try {
-//         const user = await User.findByIdAndDelete(userId);
-
-//         if (!user) {
-//             return res.status(400).json({ msg: 'User not found' });
-//         }
-
-//         res.status(200).json({ success: true, msg: 'User deleted successfully' });
-//     }
-//     catch (error) {
-//         console.error('Error in deleting user:', error.message);
-//         res.status(500).json({ success: false, msg: 'Internal server error' });
-
-//     }
-// };
-
 
 
 // login user

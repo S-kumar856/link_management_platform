@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoute = require('./routes/user.route');
+const urlRoute = require('./routes/url.route');
 dotenv.config();
 app.use(express.json());
 
@@ -13,6 +14,9 @@ const PORT = process.env.PORT || 5000;
 
 // Route middleware for user authentication (register/login)
 app.use('/api/user', userRoute);
+
+// Route middleware for URL shortening
+app.use('/api/url', urlRoute);
 
 
 app.listen(PORT, ()=>{

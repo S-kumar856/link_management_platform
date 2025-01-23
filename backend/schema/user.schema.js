@@ -5,8 +5,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true 
     },
-    username:{
-        type: String,
+    mobile:{
+        type: Number,
         required: true
     },
     email:{
@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
+    },
+    date:{
+        type: Date,
+        default: Date.now
     }
     
 });
