@@ -31,7 +31,7 @@ exports.createLinks = async (req, res) => {
     res.status(400).json({ success: false, message:'link not created' });
   }
 };
-
+        
 // Controller for handling redirection
 exports.redirectToDestination = async (req, res) => {
     try {
