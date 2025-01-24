@@ -1,56 +1,76 @@
 const UrlSchema = require('../schema/url.schema');
 
-const BASE_URL = "https://sho.rt/";
+const shortid = require("shortid")
 
-// Create a new link
-exports.createLinks = async (req, res) => {
-  try {
-    const { destinationUrl, remarks, linkExpiration } = req.body;
+exports.shortenUrl = async (req, res) => {
 
+    const { destinationUrl, expiryDate } = req.body;
   
-     // Generate a unique short URL 
-     const shortUrlID = Math.random().toString(36).substring(2, 8);
-     const shortUrl = `${BASE_URL}${shortUrlID}`;
-    
-
-    const newLink = new UrlSchema({
-      destinationUrl,
-      remarks,
-      linkExpiration,
-      shortUrl,
-    });
-
-    await newLink.save();
-    res
-      .status(201)
-      .json({ success: true,  message: "Link created successfully", data: newLink });
-    // res.redirect(shortUrl.destinationUrl);
-
-  } catch (error) {
-    console.log(error.message);
-    res.status(400).json({ success: false, message:'link not created' });
-  }
-};
-        
-// Controller for handling redirection
-exports.redirectToDestination = async (req, res) => {
+    // Dynamically get the base URL (works for both development and production)
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+  
+    // Generate URL code (use shortid, nanoid, or any unique ID generator)
+    const urlCode = shortid.generate();
+      
     try {
-      const { shortId } = req.params; // Extract the shortId from the URL
-      const fullShortUrl = `${BASE_URL}${shortId}`;
+      // Check if the original URL already exists in the database
+      let url = await UrlSchema.findOne({ destinationUrl });
+      console.log(url)
+      if (url) {
+        // If the URL exists, return the existing shortened URL
+        return res.json(url);
+      } else {
+        // Create a new shortened URL
+        const shortUrl = `${baseUrl}/${urlCode}`;
   
-      // Find the URL document in the database using the shortUrl
-      const urlRecord = await UrlSchema.findOne({ shortUrl: fullShortUrl });
+        // Handle expiration date if provided
+        let expiration = null;
+        if (expiryDate) {
+          expiration = new Date(expiryDate);
+        }
   
-      if (!urlRecord) {
-        return res.status(404).json({ message: "Short URL not found" });
+        // Save the new URL to the database
+        url = new UrlSchema({
+          destinationUrl,
+          shortUrl,
+          urlCode,
+          expiryDate: expiration,
+        });
+  
+        await url.save();
+        return res.json(url);
       }
-  
-      // Redirect to the destination URL
-      res.redirect(urlRecord.destinationUrl);
-    } catch (error) {
-      res.status(500).json({ message: "Server error", error });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json('Server error');
     }
   };
+  
+
+  // In routes/url.js or similar file
+
+// Route to redirect short URL to the original URL
+exports.redirectUrl =  async (req, res) => {
+  
+    const shortUrlCode = req.params.shorted;
+    console.log(shortUrlCode)
+   
+    try {
+        // Look up the original URL using the short URL code
+        const urlData = await UrlSchema.findOne({ urlCode: shortUrlCode });
+        console.log(urlData)
+
+        if (!urlData) {
+            return res.status(404).json('No URL found');
+        }
+
+        // If found, redirect the user to the original URL
+        return res.redirect(urlData.destinationUrl);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json('Server error');
+    }
+};
 
 // Get all links
 exports.getAllLinks = async (req, res) => {
@@ -94,9 +114,9 @@ exports.updateLink = async (req, res) => {
     if (req.body.linkExpiration !== undefined) {
       updateData.linkExpiration = req.body.linkExpiration;
 
-      // If linkExpiration.enabled is false, remove expirationDate
+      // If linkExpiration.enabled is false, remove expiryDate
       if (req.body.linkExpiration.enabled === false) {
-        updateData.linkExpiration.expirationDate = undefined; // Clear expirationDate
+        updateData.linkExpiration.expiryDate = undefined; // Clear expiryDate
       }
     }
 

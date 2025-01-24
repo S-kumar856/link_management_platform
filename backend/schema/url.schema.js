@@ -8,13 +8,13 @@ const urlSchema = new mongoose.Schema({
     },
     remarks: {
         type: String,
-        required: true,
+        // required: true,
         trim: true,
     },
     linkExpiration: {
         enabled: {
             type: Boolean,
-            required: true,
+            // required: true,
             default: false,
         },
         expiryDate: {
@@ -34,6 +34,11 @@ const urlSchema = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true
+    },
+    urlCode: { 
+        type: String, 
+        required: true, 
+        unique: true 
     },
     Date: {
         type: Date,

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoute = require('./routes/user.route');
 const urlRoute = require('./routes/url.route');
+const redirectUrl  = require('./routes/redirect.route')
 const cors = require('cors');
 dotenv.config();
 
@@ -24,8 +25,12 @@ app.use('/api/user', userRoute);
 // Route middleware for URL shortening
 app.use('/api/url', urlRoute);
 
+app.use('/', redirectUrl)
+
+
 app.get('/', (req, res)=>{
-    concole.log("hi im server")
+    console.log("hi im server");
+    res.send("im server")
 })
 
 app.listen(PORT, ()=>{
