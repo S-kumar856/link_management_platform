@@ -25,7 +25,7 @@ app.use('/api/user', userRoute);
 app.use('/api/url', urlRoute);
 
 app.get('/', (req, res)=>{
-    concole.log("hi im server")
+    console.log("hi im server")
 })
 
 app.listen(PORT, ()=>{
