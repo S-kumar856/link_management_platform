@@ -11,7 +11,7 @@ const urlSchema = new mongoose.Schema({
         // required: true,
        
     },
-    expiryDate:{ type:date },
+    expiryDate:{ type: Date },
     // linkExpiration: {
     //     enabled: {
     //         type: Boolean,
@@ -40,7 +40,7 @@ const urlSchema = new mongoose.Schema({
         required: true, 
         unique: true 
     },
-    Date: {
+    createdAt: {
         type: Date,
         default: Date.now
     },
