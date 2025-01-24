@@ -8,6 +8,7 @@ exports.shortenUrl = async (req, res) => {
   
     // Dynamically get the base URL (works for both development and production)
     const baseUrl = `${req.protocol}://${req.get('host')}`;
+    console.log(baseUrl)
   
     // Generate URL code (use shortid, nanoid, or any unique ID generator)
     const urlCode = shortid.generate();
