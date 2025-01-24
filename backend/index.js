@@ -24,6 +24,9 @@ app.use('/api/user', userRoute);
 // Route middleware for URL shortening
 app.use('/api/url', urlRoute);
 
+app.get('/', (req, res)=>{
+    concole.log("hi im server")
+})
 
 app.listen(PORT, ()=>{
     mongoose.connect(process.env.MONGO_URI)

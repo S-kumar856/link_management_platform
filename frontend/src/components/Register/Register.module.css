@@ -57,8 +57,6 @@
 }
 .buttons .loginBtn:hover{
     transform: scale(1.03);
-    /* opacity: 0.6; */
-    /* background-color: #3B3C51; */
 }
 
 /* registerForm */
@@ -68,7 +66,6 @@
     flex-direction: column;
     gap: 3vh;
     width: 70%;
-    /* background-color: red; */
     margin: 5vh;
 }
 
@@ -108,9 +105,7 @@
     transition: 0.3s;
 }
 .registerForm button:hover{
-    /* opacity: 0.6; */
     transform: scale(1.02);
-    /* background-color: #3B3C51; */
 }
 
 .already_have_account p{
