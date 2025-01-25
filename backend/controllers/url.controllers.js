@@ -89,6 +89,7 @@ exports.getAllLinks = async (req, res) => {
 exports.getLinkById = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id)
     const link = await UrlSchema.findById(id);
 
     if (!link) {
