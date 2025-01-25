@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 // Route to create a new link
-router.post('/createLinks', shortenUrl);
+router.post('/createLinks', Auth , shortenUrl);
 
 router.get('/getAllLinks', Auth, getAllLinks);
 

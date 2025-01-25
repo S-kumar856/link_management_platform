@@ -4,19 +4,20 @@ const shortid = require("shortid")
 
 exports.shortenUrl = async (req, res) => {
 
-    const { destinationUrl, expiryDate } = req.body;
-  
+    const { destinationUrl, remarks, expiryDate } = req.body;
+
+    const userID = req.user.id;
+    console.log(userID)
+
     // Dynamically get the base URL (works for both development and production)
     const baseUrl = `${req.protocol}://${req.get('host')}`;
-    console.log(baseUrl)
-  
+
     // Generate URL code (use shortid, nanoid, or any unique ID generator)
     const urlCode = shortid.generate();
       
     try {
       // Check if the original URL already exists in the database
       let url = await UrlSchema.findOne({ destinationUrl });
-      console.log(url)
       if (url) {
         // If the URL exists, return the existing shortened URL
         return res.json(url);
@@ -35,11 +36,15 @@ exports.shortenUrl = async (req, res) => {
           destinationUrl,
           shortUrl,
           urlCode,
+          remarks,
+          clickCount:1,
+          userID,
+          status:"Active",
           expiryDate: expiration,
         });
-  
+        
         await url.save();
-        return res.json(url);
+        return res.status(201).json(url);
       }
     } catch (err) {
       console.error(err);
@@ -54,13 +59,10 @@ exports.shortenUrl = async (req, res) => {
 exports.redirectUrl =  async (req, res) => {
   
     const shortUrlCode = req.params.shorted;
-    console.log(shortUrlCode)
-   
+
     try {
         // Look up the original URL using the short URL code
         const urlData = await UrlSchema.findOne({ urlCode: shortUrlCode });
-        console.log(urlData)
-
         if (!urlData) {
             return res.status(404).json('No URL found');
         }

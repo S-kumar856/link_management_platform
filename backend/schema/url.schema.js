@@ -4,32 +4,14 @@ const urlSchema = new mongoose.Schema({
     destinationUrl: {
         type: String,
         required: true,
-    
     },
     remarks: {
         type: String,
-        // required: true,
-       
+        required: true,
     },
-    expiryDate:{ type: Date },
-    // linkExpiration: {
-    //     enabled: {
-    //         type: Boolean,
-    //         // required: true,
-    //         default: false,
-    //     },
-    //     expiryDate: {
-    //         type: Date,
-    //         validate: {
-    //             validator: function (value) {
-    //                 // expirationDate is required only if enabled is true
-    //                 return this.linkExpiration.enabled ? value != null : true;
-    //             },
-    //             message:
-    //                 "Expiration date is required when link expiration is enabled.",
-    //         },
-    //     },
-    // },
+    expiryDate:{ 
+        type: Date 
+    },
     shortUrl: {
         type: String,
         required: true,
@@ -39,6 +21,18 @@ const urlSchema = new mongoose.Schema({
         type: String, 
         required: true, 
         unique: true 
+    },
+    clickCount: { 
+        type: Number, default: 0 
+    },
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User' 
+    },
+    status: { 
+        type: String, 
+        enum: ["Active", "Inactive"], 
+        default: "Active" 
     },
     createdAt: {
         type: Date,
