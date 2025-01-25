@@ -12,7 +12,7 @@ router.post('/createLinks', Auth , shortenUrl);
 
 router.get('/getAllLinks', Auth, getAllLinks);
 
-router.get('getLinkById/:id', Auth, getLinkById);
+router.get('/getLinkById/:id', Auth, getLinkById);
 
 router.put('/updateLink/:id', Auth, updateLink);
 
