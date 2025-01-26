@@ -22,6 +22,4 @@ createRoot(document.getElementById('root')).render(
       theme="colored"
       transition:Bounce />
   </BrowserRouter>
-
-
-)
+);

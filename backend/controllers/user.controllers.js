@@ -87,23 +87,6 @@ exports.updateUser = async (req, res) => {
             }
             user.email = email;
         }
-
-        // Update password if both old and new passwords are provide
-        // if (oldPassword && newPassword) {
-        //     const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
-        //     if (!isPasswordMatch) {
-        //         return res.status(400)
-        //             .json({ success: false, msg: 'Invalid old password' });
-        //     }
-
-        //     if (oldPassword === newPassword) {
-        //         return res.status(400)
-        //             .json({ success: false, msg: 'New password must be different from old password' });
-        //     }
-
-        //     const salt = await bcrypt.genSalt(10);
-        //     user.password = await bcrypt.hash(newPassword, salt);
-        // }
         
         // save the user
         await user.save();
