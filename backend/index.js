@@ -4,16 +4,25 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRoute = require('./routes/user.route');
 const urlRoute = require('./routes/url.route');
-const redirectUrl  = require('./routes/redirect.route')
+const redirectUrl = require('./routes/redirect.route')
+var device = require('express-device');
 const cors = require('cors');
 dotenv.config();
 
 // Enable CORS
 app.use(cors());
 
+// to know the devie type 
+// app.use(device.capture());
+app.use(device.capture({
+    parseUserAgent: true
+}));
+device.enableViewRouting(app);
+
+
 // middelwares & routers
 app.use(express.json());
-app.use(express.urlencoded({ extended:true }));
+app.use(express.urlencoded({ extended: true }));
 
 
 // Define the port from environment or default to 5000
@@ -28,18 +37,24 @@ app.use('/api/url', urlRoute);
 app.use('/', redirectUrl)
 
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     console.log("hi im server");
-    res.send("im server")
-})
+    res.send("im server");
+    // var accessDate;
+    // accessDate = new Date();
 
-app.listen(PORT, ()=>{
+    // console.log("Device Type: " + req.device.type.toUpperCase() + " Device Name:" + req.device.description + " Date: " + accessDate.toDateString());
+    // console.log(req.device);
+    // res.json({device: req.device.type, ip: req.ip})
+
+});
+
+app.listen(PORT, () => {
     mongoose.connect(process.env.MONGO_URI)
-    .then(()=> 
-    {
-        console.log('Connected to MongoDB')
-    }).catch((err) =>{
-        console.log(err)
-    })
+        .then(() => {
+            console.log('Connected to MongoDB')
+        }).catch((err) => {
+            console.log(err)
+        })
     console.log(`Server is running on port ${PORT}`)
 })
