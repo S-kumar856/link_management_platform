@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import style from './Analytic.module.css'
 
@@ -24,19 +24,24 @@ const Analytic = () => {
   }
   return (
     <>
-       <div className={style.dashborad_Maincontainer}>
-              <table className={style.table}>
-                <tr>
-                  <th>Timestamp</th>
-                  <th>Original Link</th>
-                  <th>Short Link</th>
-                  <th>ip address</th>
-                  <th>User Device</th>
-                </tr>
-      
-                {analyticData.map((item, index) => (
-                  <tr key={index}>
-                    <td>{new Date(item.createdAt).toLocaleString("en-US", {
+      <div className={style.dashborad_Maincontainer}>
+        <table className={style.table}>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Original Link</th>
+              <th>Short Link</th>
+              <th>ip address</th>
+              <th>User Device</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {analyticData.map((item, index) => (
+              item.deviceDetails.map((device, deviceIndex) => (
+                <tr key={`${index}-${deviceIndex}`}>
+                  <td>
+                    {new Date(item.createdAt).toLocaleString("en-US", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
@@ -44,15 +49,18 @@ const Analytic = () => {
                       minute: "2-digit",
                       hour12: true,
                     })}
-                    </td>
-                    <td>{item.destinationUrl}</td>
-                    <td>{item.shortUrl}</td>
-                    <td>{item.ipAddress }</td>
-                    <td>{item.deviceType}</td>
-                  </tr>
-                ))}
-              </table>
-            </div>
+                  </td>
+                  <td>{item.destinationUrl}</td>
+                  <td>{item.shortUrl}</td>
+                  <td>{device.ipAddress || "N/A"}</td>
+                  <td>{device.deviceType || "N/A"}</td>
+                </tr>
+              ))
+            ))}
+          </tbody>
+
+        </table>
+      </div>
     </>
   )
 }
