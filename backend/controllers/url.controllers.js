@@ -208,8 +208,6 @@ exports.deleteLink = async (req, res) => {
 
 exports.getInfo = async(req,res) => {
   const userId = req.user.id; 
-  console.log("hello")
-
   try {
     // Fetch all URLs created by the authenticated user
     const urls = await UrlSchema.find({ userId: req.user._id });
