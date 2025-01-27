@@ -7,7 +7,7 @@
 .registerLeft_container{
     width: 35%;
     background-image: url('../../assets/bg_image.svg');
-    background-size: contain;  
+    background-size: cover;  
     background-repeat: no-repeat;
     padding:4vh;
 }

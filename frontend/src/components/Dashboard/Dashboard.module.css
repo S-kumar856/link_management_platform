@@ -1,0 +1,13 @@
+table, tr, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.status{
+    color: #1EB036;
+}
+
+.inactive{
+    color: #B0901E;
+    
+}

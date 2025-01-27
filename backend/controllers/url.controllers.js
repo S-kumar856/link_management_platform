@@ -6,8 +6,8 @@ exports.shortenUrl = async (req, res) => {
 
   const { destinationUrl, remarks, expiryDate } = req.body;
 
+  console.log(req.user)
   const userID = req.user.id;
-  console.log(userID)
 
   // Dynamically get the base URL (works for both development and production)
   const baseUrl = `${req.protocol}://${req.get('host')}`;
@@ -199,6 +199,28 @@ exports.deleteLink = async (req, res) => {
       .json({ message: "Link deleted successfully", data: deletedLink });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+// ----------------------------
+
+// get info from the db
+
+exports.getInfo = async(req,res) => {
+  const userId = req.user.id; 
+  console.log("hello")
+
+  try {
+    // Fetch all URLs created by the authenticated user
+    const urls = await UrlSchema.find({ userId: req.user._id });
+
+    if (!urls.length) {
+      return res.status(404).json({ message: "No links found for this user" });
+    }
+
+    res.json(urls);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving URLs", error });
   }
 };
 
