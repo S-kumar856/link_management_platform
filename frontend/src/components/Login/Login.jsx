@@ -29,12 +29,14 @@ const Login = () => {
             const response = await axios.post('http://localhost:4000/api/user/login', loginForm);
 
             if (response.status === 200) {
-
                 setLoginForm({
                     email: '',
                     password: ''
                 });
+                
                 toast.success('User logged in successfully')
+                localStorage.setItem('token', response.data.token);
+                navigate('/mainpage')
             }
             else {
                 console.log(response.data)

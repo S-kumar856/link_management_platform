@@ -7,12 +7,11 @@
 .registerLeft_container{
     width: 35%;
     background-image: url('../../assets/bg_image.svg');
-    background-size: contain;  
+    background-size: cover;  
     background-repeat: no-repeat;
     padding:4vh;
 }
 
-/* registerleft container */
 .registerRight_container{
     width: 65%;
     display: flex;
@@ -59,14 +58,13 @@
     transform: scale(1.03);
 }
 
-/* registerForm */
+
 
 .registerForm_contant{
     display: flex;
     flex-direction: column;
     gap: 3vh;
     width: 70%;
-    margin: 5vh;
 }
 
 .join_us p{

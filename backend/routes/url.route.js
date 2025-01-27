@@ -2,7 +2,7 @@ const express = require('express');
 const Auth = require('../middlewares/AuthMiddleware');
 
 
-const {shortenUrl, getAllLinks, getLinkById, updateLink, deleteLink} = require ( '../controllers/url.controllers');
+const {shortenUrl, getAllLinks, getLinkById, updateLink, deleteLink, getInfo} = require ( '../controllers/url.controllers');
 
 const router = express.Router();
 
@@ -17,6 +17,8 @@ router.get('/getLinkById/:id', Auth, getLinkById);
 router.put('/updateLink/:id', Auth, updateLink);
 
 router.delete('/deleteLink/:id', Auth, deleteLink);
+
+router.get('/',Auth,getInfo)
 
 
 
