@@ -1,0 +1,76 @@
+.setting_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8vh;
+  
+}
+
+.setting_form {
+  width: 30vw;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+}
+.formGroup label {
+  width: 10vw;
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-family: Manrope;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: Manrope;
+}
+
+.setting_Btns{
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+}
+
+.setting_Btns button{
+    width: 100%;
+    padding: 15px 0px;
+    font-size: 0.9rem;
+    font-family: Manrope;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    color: #FFFFFF;
+    border-radius: 6px;
+    cursor: pointer;
+    
+}
+
+.Save_Btn{
+    background-color: #1B48DA;
+    transition: 0.3s;
+}
+.Save_Btn:hover{
+    /* background-color: #000; */
+    transform: scale(1.02);
+}
+
+.delete_Btn{
+    background-color: #EB0D0D;
+    transition: 0.3s;
+}
+
+.delete_Btn:hover{
+    transform: scale(1.02);
+}
+
+

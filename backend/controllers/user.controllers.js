@@ -53,12 +53,10 @@ exports.registerUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     const { name, mobile, email, oldPassword, newPassword } = req.body;
     const userId = req.user.id;
-    console.log(userId);
 
     try {
         // fetch the user
         const user = await User.findById(userId);
-        console.log(user);
 
         // check if user exists
         if (!user) {
@@ -101,7 +99,6 @@ exports.updateUser = async (req, res) => {
 exports.getUsers = async (req, res) => {
     try {
         const userId = req.user.id;
-        console.log("userId", userId);
 
         const user = await User.findById(userId).select('-password');
         if (!user) {
@@ -118,7 +115,6 @@ exports.getUsers = async (req, res) => {
 // delete user
 exports.deleteUser = async (req, res) => {
     const userId = req.user.id;
-    console.log(userId);
     try {
         // Find and delete the user directly
         const user = await User.findByIdAndDelete(userId);

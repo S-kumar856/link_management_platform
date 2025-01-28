@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import style from './Linkpage.module.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -18,8 +18,8 @@ const Linkpage = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const { showCreateForm } = useAppContext();
-
+  const { showCreateForm, setShowCreateForm } = useAppContext();
+  const linkRef = useRef();
 
   const [createUrl, setCreateUrl] = useState({
     destinationUrl: "",
@@ -30,6 +30,14 @@ const Linkpage = () => {
     const { name, value } = e.target;
     setCreateUrl({ ...createUrl, [name]: value })
   }
+
+  // copy url function
+  const handleCopy = () => {
+    navigator.clipboard.writeText(linkRef.current.textContent)
+      .then(() => toast.success("Link copied successfully!")
+    )
+      .catch((err) => console.error("Failed to copy: ", err));
+  };
 
   const handleCreateUrlSubmit = async (e) => {
     e.preventDefault();
@@ -46,24 +54,24 @@ const Linkpage = () => {
         }
       );
 
-      console.log(response.data)
-
       if (response.data.success) {
+
         toast.success("Url created successfully");
+        setCreateUrl({ destinationUrl: "", remarks: "" });
+      
       }
 
 
     } catch (error) {
       console.log("error in creating url:", error)
-      toast.error("error in creating url")
+      toast.error("error in creating url");
+      setShowCreateForm(false)
     }
 
   };
 
   const updateId = (item) => {
     setIsEditing(true);
-
-    console.log(item.destinationUrl)
     setCreateUrl({
       destinationUrl: item.destinationUrl,
       remarks: item.remarks,
@@ -73,7 +81,6 @@ const Linkpage = () => {
 
   const handleUpdateCreateUrl = async (id) => {
     // e.preventDefault();
-    console.log(id)
     try {
       const response = await axios.put(`http://localhost:4000/api/url/updateLink/${id}`,
         {
@@ -86,10 +93,13 @@ const Linkpage = () => {
         }
       );
 
-      if (response.data.success) {
-        toast.success("Url updated successfully")
-      }
+
+      toast.success("Url updated successfully");
+      toast("Url updated successfully");
+      setShowCreateForm(false)
       setIsEditing(false);
+
+
     } catch (error) {
       console.log("error in updating the Url", error);
       toast.error("Error updating the Url")
@@ -113,11 +123,13 @@ const Linkpage = () => {
 
   // console.log(linkId)
   useEffect(() => {
-    LinkUrl();
+    getUrl();
+    const date = Date();
+    console.log(date)
   }, [])
 
   // fecthing the url from the backend  
-  const LinkUrl = async () => {
+  const getUrl = async () => {
     try {
       const response = await axios.get("http://localhost:4000/api/url", {
         headers: { Authorization: `${localStorage.getItem("token")}` },
@@ -153,26 +165,39 @@ const Linkpage = () => {
     }
   };
 
+  // function for clear the data in create url model
+  const clear = () => {
+    setCreateUrl({
+      destinationUrl: "",
+      remarks: ""
+    })
+  };
+
+  // function for hiding the createurl model
+  const handleHideCross = () => {
+    setShowCreateForm(false)  
+  };
+
   return (
-    <>
-      <div className={style.tableContainer}>
-        <table className={style.table}>
-          <thead>
+
+    <div className={style.container}>
+      <h1>links</h1>
+      <div className={style.linksContainer}>
+        <table className={style.tableContainer}>
+          <thead className={style.tableHeader}>
             <tr>
               <th>Date</th>
-              <th>Original Link</th>
-              <th>Short Link</th>
+              <th className={style.originalLink}>Original Link</th>
+              <th className={style.shortLink}>Short Link</th>
               <th>Remarks</th>
               <th>Clicks</th>
-              <th>status</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
-
           <tbody>
             {linkpageLinks.map((item, index) => (
-              <tr key={index}>
-
+              <tr key={index} className={style.tableRow}>
                 <td>{new Date(item.createdAt).toLocaleString("en-US", {
                   year: "numeric",
                   month: "short",
@@ -180,46 +205,64 @@ const Linkpage = () => {
                   hour: "2-digit",
                   minute: "2-digit",
                   hour12: true,
-                })}
+                })}</td>
+                <td><div className={style.original}>{item.destinationUrl}</div></td>
+                <td className={style.shortEdit}>
+                  <div className={style.short} ref={linkRef}> {item.shortUrl}
+                  </div>
+                  <span className={style.copyIcon} onClick={handleCopy}>📋</span>
                 </td>
-                <td className={style.data}>{item.destinationUrl}</td>
-                <td>{item.shortUrl}</td>
-                <td>{item.remarks}</td>
-                <td>{item.clickCount}</td>
-
-                <td className={item.createdAt !== item.expiryDate ? style.status : style.inactive}>{item.status}</td>
-                <td><button onClick={() => updateId(item)}>edit</button> || <button onClick={() => deleteUrl(item._id)}>del</button></td>
+                <td className={style.remarks}>{item.remarks}</td>
+                <td className={style.clicks}>{item.clickCount}</td>
+                <td className={style.status}>
+                  <span className={item.status === 'Active' ? style.active : style.inactive}>
+                    {item.status}
+                  </span>
+                </td>
+                <td className={style.btns}>
+                  <button className={style.editButton} onClick={() => updateId(item)}>
+                    <i className="fa-solid fa-pen"></i>
+                  </button>
+                  <button className={style.deleteButton} onClick={() => deleteUrl(item._id)}>
+                    <i className="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
               </tr>
-            ))};
+            ))}
           </tbody>
         </table>
       </div>
 
       {/* create nre url model */}
-
-  
-
-      {isEditing ? (
-        <div className={style.Createlinks_container}>
-          <form onSubmit={() => handleUpdateCreateUrl(createUrl.id)}>
-            <div className={style.destination_input}>
-              <label htmlFor="destinationurl">Destination Url <span>*</span></label> <br />
-              <input type="text" name="destinationUrl" value={createUrl.destinationUrl} onChange={handleCreateUrl} placeholder='https://web.whatsapp.com/'
-
-              />
+      <div className={style.createLinkModel}>
+        {isEditing ? (
+          <div className={style.Createlinks_container}>
+            <div className={style.createLinkhead}>
+              <span className={style.newSpan}>New Link</span>
+              <span className={style.crossSpan} onClick={handleHideCross}>X</span>
             </div>
-            <div className={style.remarks_input}>
-              <label htmlFor="remarks">Remarks <span>*</span></label> <br />
-              <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl}>Add remarks</textarea>
-            </div>
+            {/* <div className={style.create_form}> */}
+            <form onSubmit={() => handleUpdateCreateUrl(createUrl.id)} className={style.create_form}>
+              <div className={style.Urlinput}>
+                <label htmlFor="destinationurl">Destination Url <span>*</span></label>
+                <input type="text" name="destinationUrl" value={createUrl.destinationUrl} onChange={handleCreateUrl} placeholder='https://web.whatsapp.com/'
 
-            <div className={style.toggle}>
-              <p>Link Expiration</p>
-              <p>toggle</p>
-            </div>
-            {/* Date and Time Picker */}
-            <div className="date_time_container">
-              <div className="date_time_display">
+                />
+              </div>
+              <div className={style.Urlinput}>
+                <label htmlFor="remarks">Remarks <span>*</span></label>
+                <textarea name="remarks" id="remarks" placeholder='Add remarks' value={createUrl.remarks} onChange={handleCreateUrl}>Add remarks</textarea>
+              </div>
+
+              <div className={style.toggle}>
+                <p>Link Expiration</p>
+                <label className={style.switch}>
+                  <input type="checkbox" checked />
+                  <span className={`${style.slider} ${style.round}`}></span>
+                </label>
+              </div>
+              {/* Date and Time Picker */}
+              <div className={style.date_time_container}>
                 {/* Display formatted date */}
                 <input
                   type="text"
@@ -229,102 +272,117 @@ const Linkpage = () => {
                 />
                 {/* Calendar icon to toggle DatePicker */}
                 <FiCalendar
-                  className="calendar_icon"
+                  className={style.calendar_icon}
                   onClick={() => setShowDatePicker((prev) => !prev)}
                 />
+
+                {showDatePicker && (
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => {
+                      setSelectedDate(date);
+                      // setShowDatePicker(false); // Close the calendar after selecting a date
+                    }}
+                    // showTimeSelect
+                    dateFormat="Pp"
+                    minDate={new Date()}
+                    inline // Show inline calendar
+                    className="datepicker"
+                  />
+                )}
               </div>
 
-              {showDatePicker && (
-                <DatePicker
-                  selected={selectedDate}
-                  onChange={(date) => {
-                    setSelectedDate(date);
-                    // setShowDatePicker(false); // Close the calendar after selecting a date
-                  }}
-                  // showTimeSelect
-                  dateFormat="Pp"
-                  minDate={new Date()}
-                  inline // Show inline calendar
-                  className="datepicker"
-                />
-              )}
-            </div>
+              <div className={style.createUrl_Btns}>
+                <div>
+                  <div className={style.clearBtn} onClick={clear}>Clear</div>
+                </div>
+                <div>
+                  <button className={style.createBtn} type='submit'>Save</button>
 
-            <div className={style.createUrl_Btns}>
-              <button className={style.createBtn} type='submit'>Save</button>
-              <button className={style.clearBtn}>Clear</button>
-            </div>
-          </form>
-
-        </div>
-      ) : 
-      <div>
-      {showCreateForm &&(
-
-        <div className={style.Createlinks_container}>
-          <form onSubmit={handleCreateUrlSubmit}>
-            <div className={style.destination_input}>
-              <label htmlFor="destinationurl">Destination Url <span>*</span></label> <br />
-              <input type="text" name="destinationUrl" value={createUrl.destinationUrl} onChange={handleCreateUrl} placeholder='https://web.whatsapp.com/'
-
-              />
-            </div>
-            <div className={style.remarks_input}>
-              <label htmlFor="remarks">Remarks <span>*</span></label> <br />
-              <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl}>Add remarks</textarea>
-            </div>
-
-            <div className={style.toggle}>
-              <p>Link Expiration</p>
-              <p>toggle</p>
-            </div>
-            {/* Date and Time Picker */}
-            <div className="date_time_container">
-              <div className="date_time_display">
-                {/* Display formatted date */}
-                <input
-                  type="text"
-                  value={formatDate(selectedDate)}
-                  readOnly
-                  className="date_display"
-                />
-                {/* Calendar icon to toggle DatePicker */}
-                <FiCalendar
-                  className="calendar_icon"
-                  onClick={() => setShowDatePicker((prev) => !prev)}
-                />
+                </div>
               </div>
+            </form>
+            {/* </div> */}
 
-              {showDatePicker && (
-                <DatePicker
-                  selected={selectedDate}
-                  onChange={(date) => {
-                    setSelectedDate(date);
-                    // setShowDatePicker(false); // Close the calendar after selecting a date
-                  }}
-                  // showTimeSelect
-                  dateFormat="Pp"
-                  minDate={new Date()}
-                  inline // Show inline calendar
-                  className="datepicker"
-                />
-              )}
-            </div>
+          </div>
+        ) :
+          <div>
+            {showCreateForm && (
+              <div className={style.Createlinks_container}>
+                <div className={style.createLinkhead}>
+                  <span className={style.newSpan}>New Link</span>
+                  <span className={style.crossSpan} onClick={handleHideCross}>X</span>
+                </div>
+                <form onSubmit={handleCreateUrlSubmit} className={style.create_form}>
+                  <div className={style.Urlinput}>
+                    <label htmlFor="destinationurl">Destination Url <span>*</span></label>
+                    <input type="text" name="destinationUrl" value={createUrl.destinationUrl} onChange={handleCreateUrl} placeholder='https://web.whatsapp.com/'
 
-            <div className={style.createUrl_Btns}>
-              <button className={style.createBtn} type='submit'>Create new</button>
-              <button className={style.clearBtn}>Clear</button>
-            </div>
-          </form>
+                    />
+                  </div>
+                  <div className={style.Urlinput}>
+                    <label htmlFor="remarks">Remarks <span>*</span></label> <br />
+                    <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl}>Add remarks</textarea>
+                  </div>
 
-        </div>
-      )}
+                  <div className={style.toggle}>
+                    <p>Link Expiration</p>
+
+                    <label className={style.switch}>
+                      <input type="checkbox" checked />
+                      <span className={`${style.slider} ${style.round}`}></span>
+                    </label>
+
+                  </div>
+                  {/* Date and Time Picker */}
+                  <div className={style.date_time_container}>
+
+                    {/* Display formatted date */}
+                    <input
+                      type="text"
+                      value={formatDate(selectedDate)}
+                      readOnly
+                      className="date_display"
+                    />
+                    {/* Calendar icon to toggle DatePicker */}
+                    <FiCalendar
+                      className="calendar_icon"
+                      onClick={() => setShowDatePicker((prev) => !prev)}
+                    />
+
+                    {showDatePicker && (
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => {
+                          setSelectedDate(date);
+                          // setShowDatePicker(false); // Close the calendar after selecting a date
+                        }}
+                        // showTimeSelect
+                        dateFormat="Pp"
+                        minDate={new Date()}
+                        inline // Show inline calendar
+                        className="datepicker"
+                      />
+                    )}
+                  </div>
+
+                  <div className={style.createUrl_Btns}>
+                    <div>
+                      <div className={style.clearBtn} onClick={clear}>Clear</div>
+                    </div>
+                    <div>
+                      <button className={style.createBtn} type='submit'>Create new</button>
+
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            )}
+          </div>
+        }
       </div>
-
-    }
-
-    
-    </>
+    </div>
   )
 };
 

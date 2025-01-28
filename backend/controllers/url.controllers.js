@@ -6,7 +6,6 @@ exports.shortenUrl = async (req, res) => {
 
   const { destinationUrl, remarks, expiryDate } = req.body;
 
-  console.log(req.user)
   const userID = req.user.id;
 
   // Dynamically get the base URL (works for both development and production)
@@ -39,7 +38,7 @@ exports.shortenUrl = async (req, res) => {
         remarks,
         clickCount: 1,
         userID,
-        status: "Active",
+        status:"Inactive",
         expiryDate: expiration,
       });
 
@@ -121,6 +120,7 @@ exports.redirectUrl = async (req, res) => {
 exports.getAllLinks = async (req, res) => {
   try {
     const links = await UrlSchema.find();
+
     res.status(200).json({ success: true, data: links });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -133,7 +133,7 @@ exports.getLinkById = async (req, res) => {
     const { id } = req.params;
     console.log(id)
     const link = await UrlSchema.findById(id);
-
+    
     if (!link) {
       return res.status(404).json({ success: false, error: "Link not found" });
     }
@@ -207,14 +207,26 @@ exports.deleteLink = async (req, res) => {
 // get info from the db
 
 exports.getInfo = async(req,res) => {
-  const userId = req.user.id; 
   try {
-    // Fetch all URLs created by the authenticated user
-    const urls = await UrlSchema.find({ userId: req.user._id });
+    const userId = req.user.id; 
 
+    // Fetch all URLs created by the authenticated user
+    const urls = await UrlSchema.find({ userID: userId });
+    const currentDateTime = new Date().toISOString();
+    // console.log(link.expiryDate < currentDateTime)
+    urls.map((item)=>{
+      if(item.expiryDate < currentDateTime){
+        item.status = "Inactive"
+      }
+      else{
+        item.status = "Active"
+      }
+  })
+    // console.log(urls)
     if (!urls.length) {
       return res.status(404).json({ message: "No links found for this user" });
     }
+
 
     res.json(urls);
   } catch (error) {

@@ -1,10 +1,9 @@
 .Navbar{
     display: flex;
-    padding:1vw;
+    padding-top:1vw;
     gap: 10vw;
     font-family:Manrope;
-    
-
+    height: 10vh;
 }
 
 .right_navbar{
@@ -80,6 +79,23 @@
     color: #923E0E;
     font-size: 1rem;
     font-weight: 700;
+}
+
+.profile_circle:hover{
+    transform: scale(1.25);
+}
+
+.logoutBtn{
+    
+    margin-top: 3vh;
+    border: 1px solid #ECECF2;
+    color: #878BA9;
+    font-family: Manrope;
+    font-size: 1rem;
+    font-weight: 400;
+    background-color: #FFFFFF;
+    cursor: pointer;
+
 }
 
   

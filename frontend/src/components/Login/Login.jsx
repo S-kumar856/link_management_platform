@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import style from './Login.module.css';
 import axios from 'axios';
@@ -49,6 +49,15 @@ const Login = () => {
             // navigate('/')
         }
     };
+
+    // if user already logged in
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token){
+          toast.success("User Already Logged In");
+          navigate('/mainpage')
+        }
+      },[])
 
 
     return (

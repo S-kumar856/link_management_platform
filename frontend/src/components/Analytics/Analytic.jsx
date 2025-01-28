@@ -24,42 +24,45 @@ const Analytic = () => {
   }
   return (
     <>
-      <div className={style.dashborad_Maincontainer}>
-        <table className={style.table}>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Original Link</th>
-              <th>Short Link</th>
-              <th>ip address</th>
-              <th>User Device</th>
-            </tr>
-          </thead>
+      <div className={style.container}>
+        <h1>links</h1>
+        <div className={style.linksContainer}>
+          <table className={style.tableContainer}>
+            <thead className={style.tableHeader}>
+              <tr>
+                <th>Timestamp</th>
+                <th className={style.originalLink}>Original Link</th>
+                <th className={style.shortLink}>Short Link</th>
+                <th>ip address</th>
+                <th>User Device</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {analyticData.map((item, index) => (
-              item.deviceDetails.map((device, deviceIndex) => (
-                <tr key={`${index}`}>
-                  <td>
-                    {new Date(item.createdAt).toLocaleString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })}
-                  </td>
-                  <td>{item.destinationUrl}</td>
-                  <td>{item.shortUrl}</td>
-                  <td>{device.ipAddress || "N/A"}</td>
-                  <td>{device.deviceType || "N/A"}</td>
-                </tr>
-              ))
-            ))}
-          </tbody>
+            <tbody>
+              {analyticData.map((item, index) => (
+                item.deviceDetails.map((device) => (
+                  <tr key={`${index}`} className={style.tableRow}>
+                    <td>
+                      {new Date(item.createdAt).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </td>
+                    <td><div className={style.original}>{item.destinationUrl}</div></td>
+                    <td><div className={style.short}> {item.shortUrl}</div></td>
+                    <td className={style.remarks}>{device.ipAddress || "N/A"}</td>
+                    <td className={style.remarks} >{device.deviceType || "N/A"}</td>
+                  </tr>
+                ))
+              ))}
+            </tbody>
 
-        </table>
+          </table>
+        </div>
       </div>
     </>
   )

@@ -25,7 +25,7 @@ const urlSchema = new mongoose.Schema({
     clickCount: {
         type: Number, default: 0
     },
-    userId: {
+    userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
