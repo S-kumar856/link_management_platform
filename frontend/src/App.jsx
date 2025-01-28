@@ -7,7 +7,7 @@ import MainPage from './components/mainpage/MainPage'
 import Dashboard from './components/Dashboard/Dashboard'
 import Linkpage from './components/Links/Linkpage'
 import Analytic from './components/Analytics/Analytic'
-import Createlinks from './components/Createlinks/Createlinks'
+// import Createlinks from './components/Createlinks/Createlinks'
 
 
 
@@ -22,7 +22,7 @@ const App = () => {
               <Route path='link' element={<Linkpage/>} />
               <Route path='analytic' element={<Analytic/>} />
             </Route>
-              <Route path='/createlink' element={<Createlinks/>}/>
+              {/* <Route path='/createlink' element={<Createlinks/>}/> */}
         </Routes>
     </>
   )

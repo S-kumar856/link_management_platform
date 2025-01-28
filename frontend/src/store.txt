@@ -1,0 +1,117 @@
+  {isEditing ?(
+    <div className={style.Createlinks_container}>
+        <form onSubmit={()=>handleUpdateCreateUrl(createUrl.id)}>
+          <div className={style.destination_input}>
+            <label htmlFor="destinationurl">Destination Url <span>*</span></label> <br />
+            <input type="text" name="destinationUrl" value={createUrl.destinationUrl} onChange={handleCreateUrl} placeholder='https://web.whatsapp.com/'
+
+            />
+          </div>
+          <div className={style.remarks_input}>
+            <label htmlFor="remarks">Remarks <span>*</span></label> <br />
+            <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl}>Add remarks</textarea>
+          </div>
+
+          <div className={style.toggle}>
+            <p>Link Expiration</p>
+            <p>toggle</p>
+          </div>
+          {/* Date and Time Picker */}
+          <div className="date_time_container">
+            <div className="date_time_display">
+              {/* Display formatted date */}
+              <input
+                type="text"
+                value={formatDate(selectedDate)}
+                readOnly
+                className="date_display"
+              />
+              {/* Calendar icon to toggle DatePicker */}
+              <FiCalendar
+                className="calendar_icon"
+                onClick={() => setShowDatePicker((prev) => !prev)}
+              />
+            </div>
+
+            {showDatePicker && (
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => {
+                  setSelectedDate(date);
+                  // setShowDatePicker(false); // Close the calendar after selecting a date
+                }}
+                // showTimeSelect
+                dateFormat="Pp"
+                minDate={new Date()}
+                inline // Show inline calendar
+                className="datepicker"
+              />
+            )}
+          </div>
+
+          <div className={style.createUrl_Btns}>
+            <button className={style.createBtn} type='submit'>Create new</button>
+            <button className={style.clearBtn}>Clear</button>
+          </div>
+        </form>
+
+      </div>
+   ):(
+    <div className={style.Createlinks_container}>
+        <form onSubmit={handleCreateUrlSubmit}>
+          <div className={style.destination_input}>
+            <label htmlFor="destinationurl">Destination Url <span>*</span></label> <br />
+            <input type="text" name="destinationUrl" value={createUrl.destinationUrl} onChange={handleCreateUrl} placeholder='https://web.whatsapp.com/'
+
+            />
+          </div>
+          <div className={style.remarks_input}>
+            <label htmlFor="remarks">Remarks <span>*</span></label> <br />
+            <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl}>Add remarks</textarea>
+          </div>
+
+          <div className={style.toggle}>
+            <p>Link Expiration</p>
+            <p>toggle</p>
+          </div>
+          {/* Date and Time Picker */}
+          <div className="date_time_container">
+            <div className="date_time_display">
+              {/* Display formatted date */}
+              <input
+                type="text"
+                value={formatDate(selectedDate)}
+                readOnly
+                className="date_display"
+              />
+              {/* Calendar icon to toggle DatePicker */}
+              <FiCalendar
+                className="calendar_icon"
+                onClick={() => setShowDatePicker((prev) => !prev)}
+              />
+            </div>
+
+            {showDatePicker && (
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => {
+                  setSelectedDate(date);
+                  // setShowDatePicker(false); // Close the calendar after selecting a date
+                }}
+                // showTimeSelect
+                dateFormat="Pp"
+                minDate={new Date()}
+                inline // Show inline calendar
+                className="datepicker"
+              />
+            )}
+          </div>
+
+          <div className={style.createUrl_Btns}>
+            <button className={style.createBtn} type='submit'>Create new</button>
+            <button className={style.clearBtn}>Clear</button>
+          </div>
+        </form>
+
+      </div>
+   )}

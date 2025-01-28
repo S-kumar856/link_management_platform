@@ -39,7 +39,7 @@ const Analytic = () => {
           <tbody>
             {analyticData.map((item, index) => (
               item.deviceDetails.map((device, deviceIndex) => (
-                <tr key={`${index}-${deviceIndex}`}>
+                <tr key={`${index}`}>
                   <td>
                     {new Date(item.createdAt).toLocaleString("en-US", {
                       year: "numeric",
