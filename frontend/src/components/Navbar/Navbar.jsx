@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './Navbar.module.css';
-import logo from '../../assets/logo.svg'
+import logo from '../../assets/logo.svg';
+import { useAppContext } from '../../components/AppContext';
 
 const Navbar = () => {
+    const { toggleCreateForm } = useAppContext();
+
     return (
         <>
             <div className={style.Navbar}>
@@ -15,7 +18,7 @@ const Navbar = () => {
                         <p>Tue, jan 25</p>
                     </div>
                     <div className={style.Nav_Acton}>
-                        <button className={style.create_button}>+ Create new</button>
+                        <button className={style.create_button} onClick={toggleCreateForm}>+ Create new</button>
                         <div className={style.search}>
 
                         <i className="fa-solid fa-magnifying-glass"></i>

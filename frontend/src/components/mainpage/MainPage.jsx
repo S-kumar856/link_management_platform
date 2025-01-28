@@ -1,10 +1,13 @@
-import React from 'react'
+import React,{ useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar'
 import style from './MainPage.module.css'
 
 const MainPage = () => {
     const navigate = useNavigate();
+    
+
+
     return (
         <div className={style.MainPage}>
             <Navbar />

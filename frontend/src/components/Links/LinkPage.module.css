@@ -14,7 +14,8 @@ table th{
 
 table td:nth-child(2){
     padding: 15px 0px 15px 15px;
-    width: 15%;
+    width:10%;
+    overflow: hidden;
 
 }
 table td:nth-child(1){
