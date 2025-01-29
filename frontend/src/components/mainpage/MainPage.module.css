@@ -1,12 +1,8 @@
 .sidebar_parent{
     display: flex;
     font-family: Manrope;
-    /* height: 90vh; */
 }
 
-/* .MainPage{
-    height: 100vh;
-} */
 
 .sideBar{
     width: 18vw;
@@ -61,4 +57,93 @@
 .setting p{
     font-size: 1rem;
     font-weight: 600;
+}
+
+
+/* Media Queries */
+
+/* For tablets (portrait) */
+@media screen and (max-width: 768px) {
+    .sideBar {
+        width: 25vw;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .outlet {
+        width: 75vw;
+    }
+
+    .link p, .analytics p, .dashboard p, .setting p {
+        font-size: 0.9rem;
+    }
+
+    .link i, .analytics i, .dashboard i, .setting i {
+        font-size: 1.1rem;
+    }
+
+    .setting {
+        padding: 5vh;
+        margin-top: 3vh;
+    }
+}
+
+/* For mobile phones */
+@media screen and (max-width: 480px) {
+    .sidebar_parent {
+        flex-direction: column;
+    }
+
+    .sideBar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ECECF2;
+        padding: 10px;
+        gap: 12px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .outlet {
+        width: 100%;
+    }
+
+    .link, .analytics, .dashboard {
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .link p, .analytics p, .dashboard p {
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
+    .link i, .analytics i, .dashboard i {
+        position: static;
+        font-size: 1rem;
+    }
+
+    .setting {
+        margin-top: 0;
+        padding: 10px;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .setting i {
+        position: static;
+        font-size: 1rem;
+    }
+
+    .setting p {
+        font-size: 0.8rem;
+        margin: 0;
+    }
 }

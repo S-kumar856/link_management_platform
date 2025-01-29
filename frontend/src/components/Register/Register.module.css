@@ -26,6 +26,7 @@
     display: flex;
     align-items: center;
     gap: 3vw;
+    margin-bottom: 5vh;
     
 }
 .buttons button{
@@ -122,3 +123,45 @@
     text-decoration: none;
 }
 
+/* error if passsword does not match */
+
+.Error{
+    color: red;
+}
+.Error input{
+border: 1px solid red;
+}
+
+.paraError{
+    border: blue;
+    height: 2vh;
+}
+
+.noerror{
+    height: 2vh;
+}
+
+.input {
+   margin-bottom: 10px;
+   
+}
+@media screen and (max-width: 768px) {
+    .registerLeft_container {
+      display: none;
+    }
+  
+    .registerRight_container {
+      width: 100%;
+    }
+    .buttons{
+        display: flex;
+       
+        gap: 30vw;
+        width: 100%;
+        align-items: center;
+    }
+    .registerRight_container input{
+        width: 100%;
+    }
+  }
+  

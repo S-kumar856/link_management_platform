@@ -1,0 +1,59 @@
+.Dashboard_container{
+    width: 100%;
+    height: 90vh;
+    padding: 8vh 3vw;
+    font-family: Manrope;
+}
+
+.totalClick{
+    display: flex;
+    gap: 4vw;
+    padding-bottom: 7vh;
+}
+
+.totalClick span{
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #181820;
+}
+
+.clickRes{
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1B48DA;
+}
+
+.DivBox{
+    display: flex;
+    gap: 10px;
+}
+
+.dataWise_clickBox{
+    background-color: red;
+    border: 1px solid #ECECF2;
+    width: 40vw;
+    height:60vh;
+    padding: 15px 30px;
+    border-radius: 6px;
+}
+
+.dataWise_clickBox p{
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1B48DA;
+}
+.clickDevice{
+    background-color: red;
+    border: 1px solid #ECECF2;
+    width: 40vw;
+    height:60vh;
+    padding: 15px 30px;
+    border-radius: 6px;
+}
+
+.clickDevice p{
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1B48DA;
+}
+

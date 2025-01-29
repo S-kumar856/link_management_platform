@@ -11,6 +11,8 @@ const Navbar = () => {
     const [showLogout, setShowLogout] = useState(false);
     const [userName, setUserName] = useState("");
 
+    const { searchTerm, setSearchTerm } = useAppContext();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,7 +40,7 @@ const Navbar = () => {
         localStorage.removeItem("token");
         toast.success("user Logged out successfully")
         navigate('/login')
-        setShowLogout(false)
+        // setShowLogout(false)
     };
 
     const d = new Date();
@@ -57,8 +59,11 @@ const Navbar = () => {
                 </div>
                 <div className={style.right_navbar}>
                     <div className={style.profile_name}>
+                    <span>☀️</span>
+                    <div>
                         <span>Good morning, {userName.name}</span>
                         <p>{formattedDate}</p>
+                    </div>
                     </div>
                     <div className={style.Nav_Acton}>
                         <button className={style.create_button} onClick={toggleCreateForm}>+ Create new</button>
@@ -68,16 +73,18 @@ const Navbar = () => {
                             <input type="text"
                                 placeholder='Search by remarks'
                                 className={style.Nav_search}
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
 
                         {showLogout &&
-                            <div>
+                            <div className={style.logoutDiv}>
                                 <button className={style.logoutBtn} onClick={handleLogout}>Logout</button>
                             </div>
                         }
 
-                        <div className={style.profile_circle} onClick={() => setShowLogout(true)}>
+                        <div className={style.profile_circle} onClick={() => setShowLogout(!showLogout)}>
                             {userName?.name?.slice(0, 2).toUpperCase()}
                         </div>
 

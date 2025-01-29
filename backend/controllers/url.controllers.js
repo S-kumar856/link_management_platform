@@ -38,7 +38,7 @@ exports.shortenUrl = async (req, res) => {
         remarks,
         clickCount: 1,
         userID,
-        status:"Inactive",
+        status:"Active",
         expiryDate: expiration,
       });
 
@@ -221,13 +221,11 @@ exports.getInfo = async(req,res) => {
       else{
         item.status = "Active"
       }
+         
   })
-    // console.log(urls)
     if (!urls.length) {
       return res.status(404).json({ message: "No links found for this user" });
     }
-
-
     res.json(urls);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving URLs", error });

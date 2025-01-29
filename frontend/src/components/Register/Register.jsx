@@ -69,62 +69,75 @@ const Register = () => {
                 </div>
                 <div className={style.registerRight_container}>
                     <div className={style.buttons}>
-                        <button className={style.signUpBtn} onClick={()=> navigate('/')}>SignUp</button>
-                        <button className={style.loginBtn} onClick={()=> navigate('/login')}>Login</button>
+
+                        <button className={style.signUpBtn} onClick={() => navigate('/')}>SignUp</button>
+                        <button className={style.loginBtn} onClick={() => navigate('/login')}>Login</button>
                     </div>
                     <div className={style.registerForm_contant}>
                         <div className={style.join_us}>
                             <p>Join us Today!</p>
                         </div>
-                        
-                            <form onSubmit={handleRegisterSubmit}  className={style.registerForm}>
-                                <input type="text"
-                                    name='name'
-                                    id="name"
-                                    placeholder='Name'
-                                    value={registerForm.name}
-                                    onChange={handleRegisterForm}
 
-                                /> <br />
+                        <form onSubmit={handleRegisterSubmit} className={style.registerForm}>
+                            <input type="text"
+                                name='name'
+                                id="name"
+                                placeholder='Name'
+                                value={registerForm.name}
+                                required
+                                onChange={handleRegisterForm}
 
-                                <input type="email"
-                                    name='email'
-                                    id="email"
-                                    placeholder='Email id'
-                                    value={registerForm.email}
-                                    onChange={handleRegisterForm}
+                            /> <br />
 
-                                /> <br />
+                            <input type="email"
+                                name='email'
+                                id="email"
+                                placeholder='Email id'
+                                value={registerForm.email}
+                                required
+                                onChange={handleRegisterForm}
 
-                                <input type="number"
-                                    name='mobile'
-                                    id="mobile"
-                                    placeholder='Mobile no.'
-                                    value={registerForm.mobile}
-                                    onChange={handleRegisterForm}
+                            /> <br />
 
-                                /> <br />
+                            <input type="number"
+                                name='mobile'
+                                id="mobile"
+                                placeholder='Mobile no.'
+                                value={registerForm.mobile}
+                                required
+                                onChange={handleRegisterForm}
 
-                                <input type="password"
-                                    name='password'
-                                    id="password"
-                                    placeholder='Password'
-                                    value={registerForm.password}
-                                    onChange={handleRegisterForm}
+                            /> <br />
 
-                                /> <br />
+                            <input type="password"
+                                name='password'
+                                id="password"
+                                placeholder='Password'
+                                value={registerForm.password}
+                                required
+                                onChange={handleRegisterForm}
 
+                            /> <br />
+                            <div className={registerForm.password !== registerForm.confirmpassword ? style.Error : style.registerInput}>
                                 <input type="password"
                                     name='confirmpassword'
                                     id="confirmpassword"
                                     placeholder='Confirm Password'
                                     value={registerForm.confirmpassword}
+                                    required
+                                    className={style.input}
                                     onChange={handleRegisterForm}
-                                /> <br />
+                                />
+                                {registerForm.password !== registerForm.confirmpassword ? (
+                                    <p className={style.paraError}>Password does not match</p>
+                                ):(
+                                    <div className={style.noerror}></div>
+                                )}
+                            </div> <br />
 
-                                <button type="submit">Register</button>
-                            </form>
-                    
+                            <button type="submit">Register</button>
+                        </form>
+
                         <div className={style.already_have_account}>
                             <p>Already have an account? <Link to={'/login'}>Login</Link></p>
                         </div>

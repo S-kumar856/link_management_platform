@@ -5,6 +5,10 @@ td {
   border-collapse: collapse;
 }
 
+.linksContainer{
+  margin-top: 20px;
+}
+
 .tableContainer {
   width: 100%;
   border-collapse: separate;

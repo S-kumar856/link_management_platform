@@ -25,7 +25,6 @@ const Analytic = () => {
   return (
     <>
       <div className={style.container}>
-        <h1>links</h1>
         <div className={style.linksContainer}>
           <table className={style.tableContainer}>
             <thead className={style.tableHeader}>

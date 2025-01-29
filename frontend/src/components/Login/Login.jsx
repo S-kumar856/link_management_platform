@@ -86,6 +86,7 @@ const Login = () => {
                                 placeholder='Email id'
                                 value={loginForm.email}
                                 onChange={handleLoginForm}
+                                required
                             /> <br />
 
                             <input type="password"
@@ -94,6 +95,7 @@ const Login = () => {
                                 placeholder='Password'
                                 value={loginForm.password}
                                 onChange={handleLoginForm}
+                                required
                             /> <br />
                             <button type='submit'>Login</button>
                         </form>

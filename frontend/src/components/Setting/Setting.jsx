@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Setting = () => {
     const navigate = useNavigate();
+    const [showDeleteModel, setShowDeleteModel] = useState(false)
     const [settingForm, setSettingForm] = useState({
         name: '',
         email: '',
@@ -82,55 +83,80 @@ const Setting = () => {
                     headers: { Authorization: `${localStorage.getItem("token")}` },
                 },
             )
-
-            toast.success("user account deleted successfully")
-            navigate('/')
+            if (response.data) {
+                toast.success("user account deleted successfully")
+                localStorage.removeItem("token");
+                navigate('/')
+            }
         } catch (error) {
             console.log("error in deleting user account", error);
             toast.error("error in deleting user account")
         }
     };
 
+    const resetForm = () => {
+        setShowDeleteModel(false)
+    }
     return (
         <>
             <div className={style.setting_container}>
-                <form onSubmit={handleFormSubmit} className={style.setting_form}>
-                    <div className={style.formGroup}>
-                        <label htmlFor="name">Name</label>
-                        <input type="text" name="name"
-                            placeholder='kumar'
-                            value={settingForm.name}
-                            onChange={handleSettingForm}
-                        />
-                    </div>
-
-                    <div className={style.formGroup}>
-                        <label htmlFor="name">Email id</label>
-                        <input type="email" name="email"
-                            placeholder='kumar@gmail.com'
-                            value={settingForm.email}
-                            onChange={handleSettingForm}
-                        />
-                    </div>
-
-                    <div className={style.formGroup}>
-                        <label htmlFor="name">Mobile no.</label>
-                        <input type="number" name="mobile"
-                            placeholder='1234567890'
-                            value={settingForm.phone}
-                            onChange={handleSettingForm}
-                        />
-                    </div>
-
-                    <div className={style.setting_Btns}>
-                        <div>
-                            <button className={style.Save_Btn} type='submit'>Save Changes</button>
+                <div className={style.setting_form}>
+                    <form onSubmit={handleFormSubmit} >
+                        <div className={style.formGroup}>
+                            <label htmlFor="name">Name</label>
+                            <input type="text" name="name"
+                                placeholder='kumar'
+                                value={settingForm.name}
+                                onChange={handleSettingForm}
+                            />
                         </div>
-                        <div>
-                            <button className={style.delete_Btn} onClick={deleteUser}>Delete Account</button>
+
+                        <div className={style.formGroup}>
+                            <label htmlFor="name">Email id</label>
+                            <input type="email" name="email"
+                                placeholder='kumar@gmail.com'
+                                value={settingForm.email}
+                                onChange={handleSettingForm}
+                            />
+                        </div>
+
+                        <div className={style.formGroup}>
+                            <label htmlFor="name">Mobile no.</label>
+                            <input type="number" name="mobile"
+                                placeholder='1234567890'
+                                value={settingForm.mobile}
+                                onChange={handleSettingForm}
+                            />
+                        </div>
+
+                        <div className={style.setting_Btns}>
+                            <div>
+                                <button className={style.Save_Btn} type='submit'>Save Changes</button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div onClick={() => setShowDeleteModel(true)} className={style.DelAccount_Btn}>
+                        <button className={style.delete_Btn}>Delete Account</button>
+                    </div>
+                </div>
+
+
+                {showDeleteModel && (
+                    <div className={style.overlay}>
+                    <div className={style.delete_model}>
+                        <span onClick={resetForm}>x</span>
+                        <div className={style.delete_content}>
+                            <p> Are you sure, you want to remove it ? </p>
+                            <div className={style.deleteModel_Btns}>
+                                <button className={style.noBtn} onClick={resetForm}>NO</button>
+                                <button className={style.yesBtn} onClick={deleteUser}>YES</button>
+                            </div>
+
                         </div>
                     </div>
-                </form>
+                    </div>
+                )}
             </div>
 
         </>
