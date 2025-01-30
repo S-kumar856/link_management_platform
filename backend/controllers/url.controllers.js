@@ -36,7 +36,6 @@ exports.shortenUrl = async (req, res) => {
         shortUrl,
         urlCode,
         remarks,
-        clickCount: 1,
         userID,
         status: "Active",
         expiryDate: expiration,
@@ -68,7 +67,7 @@ exports.redirectUrl = async (req, res) => {
     }
 
     // Increment the clickCount by 1
-    const countUrl = urlData.clickCount += 1;
+   urlData.clickCount += 1;
 
     // Get today's date in "YYYY-MM-DD" format
     const today = new Date().toISOString().split("T")[0];
@@ -131,7 +130,7 @@ exports.getAllLinks = async (req, res) => {
 exports.getLinkById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id)
+
     const link = await UrlSchema.findById(id);
 
     if (!link) {
@@ -264,11 +263,11 @@ exports.getAnalytics = async (req, res) => {
   }
 };
 
-
 // get info from the db
 exports.getInfo = async (req, res) => {
   try {
     const userId = req.user.id;
+
     // pagination
     let { page, limit } = req.query;
 
@@ -280,13 +279,13 @@ exports.getInfo = async (req, res) => {
     }
 
     const totalLinks = await UrlSchema.countDocuments({ userID: userId });
-    console.log("totalLiks:", totalLinks)
+  
     const totalPages = Math.ceil(totalLinks / limit);
 
     if (page > totalPages && totalPages > 0) {
       page = totalPages;
     }
-    console.log(totalPages)
+
     const skip = (page - 1) * limit;
 
     // Fetch all URLs created by the authenticated user

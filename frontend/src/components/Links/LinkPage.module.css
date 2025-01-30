@@ -6,7 +6,7 @@ td {
 }
 
 .linksContainer{
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .tableContainer {
@@ -143,12 +143,12 @@ td {
   color: #ed3b4d;
 }
 
-/* model */
-/* .overlays{
+/* --------------------------------- */
+/* create url model */
+.overlays{
   display: flex;
   justify-content: center;  
-  
-
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -156,13 +156,14 @@ td {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5); 
   z-index: 998;
-} */
+}
 .createLinkModel {
-  /* margin-top: 5vh; */
   position: absolute;
   background-color: #ffffff;
   width: 35vw;
-  top: 0;
+  height:85vh;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
 
 .createLinkhead {
@@ -189,12 +190,11 @@ td {
   color: red;
 }
 
-.create_form {
+.input_style{
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 3vh;
-  /* background-color: red; */
+  gap: 3vh; 
 }
 
 .Urlinput {
@@ -249,9 +249,16 @@ td {
 .date_time_container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border: 1px solid #d1d5db;
   padding: 10px;
   border-radius: 6px;
+  height: 7vh;
+  cursor: pointer;
+}
+
+.emptyHeight{
+  height: 7vh;
 }
 .date_time_container input {
   background: transparent;
@@ -262,14 +269,17 @@ td {
   outline: none;
 }
 
+
 .createUrl_Btns {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 12vh;
   background-color: #3b3c511a;
-}
+  border-bottom-left-radius: 12px;
+  padding: 10px;
 
+}
 .createBtn {
   background-color: #1b48da;
   color: #ffffff;
@@ -279,14 +289,26 @@ td {
   outline: none;
   font-size: 1rem;
   font-family: Manrope;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.createBtn:hover{
+  transform: scale(1.05);
 }
 
 .clearBtn {
   font-size: 1rem;
   font-family: Manrope;
   color: #3b3c51;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.clearBtn:hover{
+  color: red;
 }
 
+/* ---------------------------------------------- */
 /* style for toggle button  */
 .switch {
   position: relative;
@@ -343,24 +365,21 @@ input:checked + .slider:before {
 .slider.round {
   border-radius: 34px;
 }
-
 .slider.round:before {
   border-radius: 50%;
 }
 .errorInput {
   border-color: #dc2626;
-  /* background-color: #fff5f5; */
 }
 
 .errorMessage {
-  /* display: block; */
   color: #dc2626;
   font-size: 14px;
   margin-top: 4px;
 }
 
+/* ---------------------------------------------- */
 /* delete showmodel */
-
 .overlay {
   position: fixed;
   top: 0;
@@ -368,18 +387,11 @@ input:checked + .slider:before {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
-  /* backdrop-filter: blur(4px); */
   z-index: 998;
 }
 
 .delete_model{
-  /* position: absolute;
-  background-color: #FFFFFF;
-  width: 30vw;
-  height: 30vh;
-  padding: 10px;
-  border-radius: 6px; */
-  position: fixed; /* change from absolute to fixed */
+  position: fixed; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -389,9 +401,7 @@ input:checked + .slider:before {
   padding: 10px;
   border-radius: 6px;
   z-index: 999; /* ensure modal appears above overlay */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .delete_model span{
@@ -424,7 +434,6 @@ input:checked + .slider:before {
 }
 
 .deleteModel_Btns button{
-  /* background-color: blue; */
   padding: 1.2vh 4.5vw;
   border: none;
   outline: none;
@@ -449,3 +458,38 @@ input:checked + .slider:before {
 .noBtn:hover, .yesBtn:hover{
   transform: scale(1.05);
 }
+
+/* -------------------------------------------- */
+/* pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  margin-top: 10vh;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.pagination button:hover{
+  transform: scale(1.1);
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pageNum span{
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 6px;
+  margin: 0 10px;
+}
+

@@ -16,13 +16,13 @@ const Analytic = () => {
 
   const AnalyticUrl = async (page = 1) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/url/analytics?page=${page}&limit=5`, {
+      const response = await axios.get(`http://localhost:4000/api/url/analytics?page=${page}&limit=7`, {
         headers: { Authorization: `${localStorage.getItem("token")}` },
       });
       console.log(response.data)
       setAnalyticData(response.data.clicks);
       setTotalPages(response.data.totalPages);
-      setCurrentPage(response.data.currentPage);  
+      setCurrentPage(response.data.currentPage);
     }
     catch (error) {
       console.log(error)
@@ -34,7 +34,6 @@ const Analytic = () => {
       setCurrentPage(newPage);
     }
   };
-
 
   return (
     <>
@@ -53,41 +52,42 @@ const Analytic = () => {
 
             <tbody>
               {analyticData.map((item, index) => (
-               
-                  <tr key={`${index}`} className={style.tableRow}>
-                    <td>
-                      {new Date(item.createdAt).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </td>
-                    <td><div className={style.original}>{item.destinationUrl}</div></td>
-                    <td><div className={style.short}> {item.shortUrl}</div></td>
-                    <td className={style.remarks}>{item.ipAddress || "N/A"}</td>
-                    <td className={style.remarks} >{item.deviceType || "N/A"}</td>
-                  </tr>
-             
+
+                <tr key={`${index}`} className={style.tableRow}>
+                  <td>
+                    {new Date(item.createdAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </td>
+                  <td><div className={style.original}>{item.destinationUrl}</div></td>
+                  <td><div className={style.short}> {item.shortUrl}</div></td>
+                  <td className={style.remarks}>{item.ipAddress || "N/A"}</td>
+                  <td className={style.remarks} >{item.deviceType || "N/A"}</td>
+                </tr>
+
               ))}
             </tbody>
 
           </table>
         </div>
 
-         {/* Pagination Controls */}
-         <div className={style.pagination}>
+        {/* Pagination Controls */}
+        <div className={style.pagination}>
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
             Previous
           </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
+          <div className={style.pageNum}>
+            <span>{currentPage}</span>
+            <span>{totalPages}</span>
+          </div>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}

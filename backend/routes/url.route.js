@@ -3,6 +3,7 @@ const Auth = require('../middlewares/AuthMiddleware');
 
 
 const {shortenUrl, getAllLinks, getLinkById, updateLink, deleteLink, getInfo, getAnalytics} = require ( '../controllers/url.controllers');
+const {getDashboardStats} = require ('../controllers/dashboard.controllers')
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.get("/analytics", Auth, getAnalytics);
 
 router.get('/',Auth,getInfo)
 
+router.get('/dashboard/Stats', Auth, getDashboardStats)
 
 
 
