@@ -10,6 +10,7 @@ const Navbar = () => {
     const { toggleCreateForm } = useAppContext();
     const [showLogout, setShowLogout] = useState(false);
     const [userName, setUserName] = useState("");
+    const [greeting, setGreeting] = useState("");
 
     const { searchTerm, setSearchTerm } = useAppContext();
 
@@ -33,6 +34,16 @@ const Navbar = () => {
         } catch (error) {
             console.log("Failed to fetch user data", error)
         }
+
+        // greeting
+        if (d.getHours() >= 0 && d.getHours() < 12) {
+            setGreeting("morning");
+          }
+          if (d.getHours() >= 12 && d.getHours() < 16) {
+            setGreeting("afternoon");
+          } else {
+            setGreeting("evening");
+          }
     };
 
 
@@ -40,7 +51,6 @@ const Navbar = () => {
         localStorage.removeItem("token");
         toast.success("user Logged out successfully")
         navigate('/login')
-        // setShowLogout(false)
     };
 
     const d = new Date();
@@ -61,7 +71,7 @@ const Navbar = () => {
                     <div className={style.profile_name}>
                     <span>☀️</span>
                     <div>
-                        <span>Good morning, {userName.name}</span>
+                        <span>Good {greeting}, {userName.name}</span>
                         <p>{formattedDate}</p>
                     </div>
                     </div>
