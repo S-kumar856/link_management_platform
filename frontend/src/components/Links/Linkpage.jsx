@@ -21,6 +21,9 @@ const Linkpage = () => {
   const [showDeleteModel, setShowDeleteModel] = useState(false);
   const [expirationEnabled, setExpirationEnabled] = useState(false);
   const [expiryDate, setexpiryDate] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
 
   const [createUrl, setCreateUrl] = useState({
     destinationUrl: "",
@@ -59,7 +62,7 @@ const Linkpage = () => {
       }));
     }
   }
-// -----------------------------------
+  // -----------------------------------
   // search filter function
   const filteredRemarks = linkpageLinks.filter((item) =>
     item.remarks?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,21 +75,29 @@ const Linkpage = () => {
   };
 
   useEffect(() => {
-    getUrl();
-  }, [])
+    getUrl(currentPage);
+  }, [currentPage])
 
   // fecthing the url from the backend  
-  const getUrl = async () => {
+  const getUrl = async (page = 1) => {
     try {
-      const response = await axios.get("http://localhost:4000/api/url", {
+      const response = await axios.get(`http://localhost:4000/api/url?page=${page}&limit=5`, {
         headers: { Authorization: `${localStorage.getItem("token")}` },
       });
-      setLinkpageLinks(response.data)
+      setLinkpageLinks(response.data.links)
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage);
     }
     catch (error) {
       console.log(error)
     }
   }
+  // pagination
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   const handleCreateUrlSubmit = async (e) => {
     e.preventDefault();
@@ -155,8 +166,6 @@ const Linkpage = () => {
         resetForm();
         getUrl();
       }
-      // setShowCreateForm(false)
-      // setIsEditing(false);
     } catch (error) {
       console.log("error in updating the Url", error);
       toast.error("Error updating the Url")
@@ -336,7 +345,7 @@ const Linkpage = () => {
                             setShowDatePicker(false);
                           }}
                           // showTimeSelect
-                          dateFormat="Pp"  
+                          dateFormat="Pp"
                           minDate={new Date()}
                           block
                           className="datepicker"
@@ -378,7 +387,27 @@ const Linkpage = () => {
               </div>
             </div>
           )}
+
+          {/* Pagination Controls */}
+          <div className={style.pagination}>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </div>
+
 
 
       ) : (

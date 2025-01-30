@@ -5,23 +5,37 @@ import style from './Analytic.module.css'
 
 const Analytic = () => {
 
-  const [analyticData, setAnalyticData] = useState([])
-  useEffect(() => {
-    AnalyticUrl();
-  }, [])
+  const [analyticData, setAnalyticData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const AnalyticUrl = async () => {
+
+  useEffect(() => {
+    AnalyticUrl(currentPage);
+  }, [currentPage])
+
+  const AnalyticUrl = async (page = 1) => {
     try {
-      const response = await axios.get("http://localhost:4000/api/url", {
+      const response = await axios.get(`http://localhost:4000/api/url/analytics?page=${page}&limit=5`, {
         headers: { Authorization: `${localStorage.getItem("token")}` },
       });
       console.log(response.data)
-      setAnalyticData(response.data)
+      setAnalyticData(response.data.clicks);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage);  
     }
     catch (error) {
       console.log(error)
     }
-  }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+
   return (
     <>
       <div className={style.container}>
@@ -39,7 +53,7 @@ const Analytic = () => {
 
             <tbody>
               {analyticData.map((item, index) => (
-                item.deviceDetails.map((device) => (
+               
                   <tr key={`${index}`} className={style.tableRow}>
                     <td>
                       {new Date(item.createdAt).toLocaleString("en-US", {
@@ -53,14 +67,33 @@ const Analytic = () => {
                     </td>
                     <td><div className={style.original}>{item.destinationUrl}</div></td>
                     <td><div className={style.short}> {item.shortUrl}</div></td>
-                    <td className={style.remarks}>{device.ipAddress || "N/A"}</td>
-                    <td className={style.remarks} >{device.deviceType || "N/A"}</td>
+                    <td className={style.remarks}>{item.ipAddress || "N/A"}</td>
+                    <td className={style.remarks} >{item.deviceType || "N/A"}</td>
                   </tr>
-                ))
+             
               ))}
             </tbody>
 
           </table>
+        </div>
+
+         {/* Pagination Controls */}
+         <div className={style.pagination}>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+          >
+            Next
+          </button>
         </div>
       </div>
     </>
