@@ -4,6 +4,7 @@ import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  console.log(apiUrl)
   const [stats, setStats] = useState({
     totalClicks: 0,
     dateWiseClicks: [],
@@ -14,9 +15,7 @@ const Dashboard = () => {
   const [urls, setUrls] = useState([]);
   const [selectedUrl, setSelectedUrl] = useState('all');
 
-  console.log(stats)
 
-  console.log(urls)
   useEffect(() => {
     fetchUrls();
     fetchDashboardStats();
@@ -31,13 +30,13 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       const response = await axios.get(`${apiUrl}/api/url`, {
         headers: {
-          'Authorization': `${token}`,
+          'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response)
       // Ensure response.data is an array
+      console.log(response.data)
     if (Array.isArray(response.data)) {
-      setUrls(response.data.data);
+      setUrls(response.data);
       
     } else {
       console.error('Unexpected response format:', response.data);
@@ -53,13 +52,14 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       let url = `${apiUrl}/api/url/dashboard/Stats`;
+
       if (selectedUrl !== 'all') {
         url += `?urlId=${selectedUrl}`;
       }
 
       const response = await axios.get(url, {
         headers: {
-          'Authorization': `${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
       console.log(response.data)

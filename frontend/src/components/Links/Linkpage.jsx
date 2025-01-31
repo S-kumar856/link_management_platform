@@ -104,7 +104,7 @@ const Linkpage = () => {
   const getUrl = async (page = 1) => {
     try {
       const response = await axios.get(`${apiUrl}/api/url?page=${page}&limit=7`, {
-        headers: { Authorization: `${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       const updatedLinks = response.data.links.map(link => ({
@@ -137,7 +137,7 @@ const Linkpage = () => {
           expiryDate: expirationEnabled ? expiryDate : null,
         },
         {
-          headers: { Authorization: `${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
 
@@ -168,7 +168,7 @@ const Linkpage = () => {
     })
     const hasExpiration = !!item.expiryDate;
     setExpirationEnabled(hasExpiration);
-    
+
     if (hasExpiration) {
       const expDate = new Date(item.expiryDate);
       setSelectedDate(expDate);
@@ -200,7 +200,7 @@ const Linkpage = () => {
 
         },
         {
-          headers: { Authorization: `${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
       console.log(response.data)
@@ -234,7 +234,7 @@ const Linkpage = () => {
     try {
       await axios.delete(`${apiUrl}/api/url/deleteLink/${deleteId}`,
         {
-          headers: { Authorization: `${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
       // Remove deleted folder from the list
       const updatedDashboardLink = linkpageLinks.filter((url) => url._id !== currentId)
@@ -332,7 +332,7 @@ const Linkpage = () => {
             </table>
           </div>
 
-         
+
           {/* delete showmodel  */}
           {showDeleteModel && (
             <div className={style.overlay}>
@@ -374,91 +374,91 @@ const Linkpage = () => {
       ) : (
         <p>No results found.</p>)}
 
-        {showCreateForm && (
-          <div className={style.overlays}>
-            <div className={style.createLinkModel}>
-              <div className={style.Createlinks_container}>
-                <div className={style.createLinkhead}>
-                  <span className={style.newSpan}>{isEditing ? 'Edit Link' : 'New Link'}</span>
-                  <span className={style.crossSpan} onClick={resetForm}>X</span>
-                </div>
-                <form onSubmit={isEditing ? handleUpdateCreateUrl : handleCreateUrlSubmit}>
-                  <div className={style.input_style}>
-                    <div className={style.Urlinput}>
-                      <label htmlFor="destinationurl">Destination Url <span>*</span></label>
-
-                      <input type="text" name="destinationUrl"
-                        value={createUrl.destinationUrl}
-                        onChange={handleCreateUrl}
-                        placeholder='https://web.whatsapp.com/'
-                      />
-
-                    </div>
-                    <div className={style.Urlinput}>
-                      <label htmlFor="remarks">Remarks <span>*</span></label> <br />
-                      <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl} placeholder='Add remarks' required>Add remarks</textarea>
-                    </div>
-
-                    <div className={style.toggle}>
-                      <p>Link Expiration</p>
-                      <label className={style.switch}>
-                        <input
-                          type="checkbox"
-                          checked={expirationEnabled}
-                          onChange={handleToggleChange}
-                        />
-                        <span className={`${style.slider} ${style.round}`}></span>
-                      </label>
-                    </div>
-
-                    {/* Date and Time Picker */}
-                    {expirationEnabled ? (
-                      <div className={style.date_time_container}>
-                        <input
-                          type="text"
-                          value={expiryDate ? formatDate(expiryDate) : ''}
-                          readOnly
-                          className="date_display"
-                        />
-                        <FiCalendar
-                          className="calendar_icon"
-                          onClick={() => setShowDatePicker((prev) => !prev)}
-                        />
-                        {showDatePicker && (
-                          <DatePicker
-                            selected={selectedDate}
-                            onChange={(date) => {
-                              handleDateChange(date);
-                              setShowDatePicker(false);
-                            }}
-                            showTimeSelect
-                            dateFormat="Pp"
-                            minDate={new Date()}
-                            block
-                            className="datepicker"
-                          />
-                        )}
-                      </div>
-
-                    ) :
-                      (<div className={style.emptyHeight}></div>)}
-                  </div>
-
-                  <div className={style.createUrl_Btns}>
-                    <div>
-                      <div className={style.clearBtn} onClick={resetForm}>Clear</div>
-                    </div>
-                    <div>
-                      <button className={style.createBtn} type='submit'> {isEditing ? 'Save' : 'Create new'}</button>
-
-                    </div>
-                  </div>
-                </form>
-
+      {showCreateForm && (
+        <div className={style.overlays}>
+          <div className={style.createLinkModel}>
+            <div className={style.Createlinks_container}>
+              <div className={style.createLinkhead}>
+                <span className={style.newSpan}>{isEditing ? 'Edit Link' : 'New Link'}</span>
+                <span className={style.crossSpan} onClick={resetForm}>X</span>
               </div>
+              <form onSubmit={isEditing ? handleUpdateCreateUrl : handleCreateUrlSubmit}>
+                <div className={style.input_style}>
+                  <div className={style.Urlinput}>
+                    <label htmlFor="destinationurl">Destination Url <span>*</span></label>
+
+                    <input type="text" name="destinationUrl"
+                      value={createUrl.destinationUrl}
+                      onChange={handleCreateUrl}
+                      placeholder='https://web.whatsapp.com/'
+                    />
+
+                  </div>
+                  <div className={style.Urlinput}>
+                    <label htmlFor="remarks">Remarks <span>*</span></label> <br />
+                    <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl} placeholder='Add remarks' required>Add remarks</textarea>
+                  </div>
+
+                  <div className={style.toggle}>
+                    <p>Link Expiration</p>
+                    <label className={style.switch}>
+                      <input
+                        type="checkbox"
+                        checked={expirationEnabled}
+                        onChange={handleToggleChange}
+                      />
+                      <span className={`${style.slider} ${style.round}`}></span>
+                    </label>
+                  </div>
+
+                  {/* Date and Time Picker */}
+                  {expirationEnabled ? (
+                    <div className={style.date_time_container}>
+                      <input
+                        type="text"
+                        value={expiryDate ? formatDate(expiryDate) : ''}
+                        readOnly
+                        className="date_display"
+                      />
+                      <FiCalendar
+                        className="calendar_icon"
+                        onClick={() => setShowDatePicker((prev) => !prev)}
+                      />
+                      {showDatePicker && (
+                        <DatePicker
+                          selected={selectedDate}
+                          onChange={(date) => {
+                            handleDateChange(date);
+                            setShowDatePicker(false);
+                          }}
+                          showTimeSelect
+                          dateFormat="Pp"
+                          minDate={new Date()}
+                          block
+                          className="datepicker"
+                        />
+                      )}
+                    </div>
+
+                  ) :
+                    (<div className={style.emptyHeight}></div>)}
+                </div>
+
+                <div className={style.createUrl_Btns}>
+                  <div>
+                    <div className={style.clearBtn} onClick={resetForm}>Clear</div>
+                  </div>
+                  <div>
+                    <button className={style.createBtn} type='submit'> {isEditing ? 'Save' : 'Create new'}</button>
+
+                  </div>
+                </div>
+              </form>
+
             </div>
-            </div>
-          )}
+          </div>
+        </div>
+      )}
     </>
   )
 };

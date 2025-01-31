@@ -34,6 +34,7 @@ const Login = () => {
                     email: '',
                     password: ''
                 });
+                console.log(response.data.token)
                 
                 toast.success('User logged in successfully')
                 localStorage.setItem('token', response.data.token);

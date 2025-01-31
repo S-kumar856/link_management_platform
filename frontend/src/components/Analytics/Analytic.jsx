@@ -17,7 +17,7 @@ const Analytic = () => {
   const AnalyticUrl = async (page = 1) => {
     try {
       const response = await axios.get(`${apiUrl}/api/url/analytics?page=${page}&limit=7`, {
-        headers: { Authorization: `${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       console.log(response.data)
       setAnalyticData(response.data.clicks);

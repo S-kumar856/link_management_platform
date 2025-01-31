@@ -25,7 +25,7 @@ const Navbar = () => {
         try {
             const response = await axios.get(`${apiUrl}/api/user/getusers`,
                 {
-                    headers: { Authorization: `${localStorage.getItem("token")}` },
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 });
             const userData = response.data.user;
             setUserName({

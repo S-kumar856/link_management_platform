@@ -28,7 +28,7 @@ const Setting = () => {
         try {
             const response = await axios.get(`${apiUrl}/api/user/getusers`,
                 {
-                    headers: { Authorization: `${localStorage.getItem("token")}` },
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 });
             const userData = response.data.user;
             setSettingForm({
@@ -54,7 +54,7 @@ const Setting = () => {
             const response = await axios.put(`${apiUrl}/api/user/updateusers`,
                 updateUser,
                 {
-                    headers: { Authorization: `${localStorage.getItem("token")}` },
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 })
 
             toast.success("Profile updated successfully!", {
@@ -81,7 +81,7 @@ const Setting = () => {
         try {
             const response = await axios.delete(`${apiUrl}/api/user/deleteusers`,
                 {
-                    headers: { Authorization: `${localStorage.getItem("token")}` },
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 },
             )
             if (response.data) {
