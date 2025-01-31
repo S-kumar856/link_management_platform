@@ -463,4 +463,4 @@ const Linkpage = () => {
   )
 };
 
-export default Linkpage
+export default Linkpage;
