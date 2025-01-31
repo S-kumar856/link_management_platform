@@ -311,9 +311,19 @@ exports.getInfo = async (req, res) => {
 
     // Fetch all URLs created by the authenticated user
     const urls = await UrlSchema.find({ userID: userId })
+      .sort({ createdAt: -1 }) // Sort by newest first
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 }); // Sort by newest first
+
+      if (!urls.length) {
+        return res.status(404).json({ 
+          message: "No links found for this user",
+          data: [],
+          currentPage: page,
+          totalPages: 0,
+          totalItems: 0
+        });
+      }
 
     res.json({
       links: urls,
@@ -321,9 +331,6 @@ exports.getInfo = async (req, res) => {
       currentPage: page,
     });
 
-    if (!urls.length) {
-      return res.status(404).json({ message: "No links found for this user" });
-    }
   } catch (error) {
     res.status(500).json({ message: "Error retrieving URLs", error });
   }
