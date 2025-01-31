@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import style from './Linkpage.module.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 const Linkpage = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const [linkpageLinks, setLinkpageLinks] = useState([])
 
   // usestate for date and time handle
@@ -32,6 +34,19 @@ const Linkpage = () => {
   });
 
   // ------------------------------------------------------------
+
+  const isUrlExpired = useCallback((expiryDate) => {
+    if (!expiryDate) return false;
+    return new Date() > new Date(expiryDate);
+  }, []);
+
+  const getStatus = useCallback((url) => {
+    if (url.status === 'Inactive') return 'Inactive';
+    if (isUrlExpired(url.expiryDate)) return 'Inactive';
+    return 'Active';
+  }, [isUrlExpired]);
+
+
   // Handle toggle change
   const handleToggleChange = (e) => {
     setExpirationEnabled(e.target.checked);
@@ -43,10 +58,13 @@ const Linkpage = () => {
       }));
     } else {
       // Set default expiration to selected date when enabling
-      setexpiryDate(selectedDate);
+      const defaultDate = new Date();
+      defaultDate.setHours(defaultDate.getHours() + 24); // Set default to 24 hours from now
+      setexpiryDate(defaultDate);
+      setSelectedDate(defaultDate);
       setCreateUrl(prev => ({
         ...prev,
-        expiryDate: selectedDate
+        expiryDate: defaultDate
       }));
     }
   };
@@ -54,6 +72,7 @@ const Linkpage = () => {
   // Modify your existing date change handler
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    setShowDatePicker(false);
     if (expirationEnabled) {
       setexpiryDate(date);
       setCreateUrl(prev => ({
@@ -76,15 +95,23 @@ const Linkpage = () => {
 
   useEffect(() => {
     getUrl(currentPage);
+    // Set up periodic refresh
+    const interval = setInterval(getUrl, 60000); // Refresh every minute
+    return () => clearInterval(interval);
   }, [currentPage])
 
   // fecthing the url from the backend  
   const getUrl = async (page = 1) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/url?page=${page}&limit=7`, {
+      const response = await axios.get(`${apiUrl}/api/url?page=${page}&limit=7`, {
         headers: { Authorization: `${localStorage.getItem("token")}` },
       });
-      setLinkpageLinks(response.data.links)
+
+      const updatedLinks = response.data.links.map(link => ({
+        ...link,
+        status: getStatus(link)
+      }));
+      setLinkpageLinks(updatedLinks)
       setTotalPages(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
     }
@@ -103,7 +130,7 @@ const Linkpage = () => {
   const handleCreateUrlSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/url/createLinks',
+      const response = await axios.post(`${apiUrl}/api/url/createLinks`,
         {
           destinationUrl: createUrl.destinationUrl,
           remarks: createUrl.remarks,
@@ -137,7 +164,20 @@ const Linkpage = () => {
     setCreateUrl({
       destinationUrl: item.destinationUrl,
       remarks: item.remarks,
+      expiryDate: item.expiryDate
     })
+    const hasExpiration = !!item.expiryDate;
+    setExpirationEnabled(hasExpiration);
+    
+    if (hasExpiration) {
+      const expDate = new Date(item.expiryDate);
+      setSelectedDate(expDate);
+      setexpiryDate(expDate);
+    } else {
+      const defaultDate = new Date();
+      defaultDate.setHours(defaultDate.getHours() + 24);
+      setSelectedDate(defaultDate);
+    }
     setShowCreateForm(true);
   };
 
@@ -152,17 +192,18 @@ const Linkpage = () => {
   const handleUpdateCreateUrl = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:4000/api/url/updateLink/${currentId}`,
+      const response = await axios.put(`${apiUrl}/api/url/updateLink/${currentId}`,
         {
           destinationUrl: createUrl.destinationUrl,
           remarks: createUrl.remarks,
-          expiryDate: expirationEnabled ? expiryDate.expiryDate : null,
+          expiryDate: expirationEnabled ? selectedDate : null,
 
         },
         {
           headers: { Authorization: `${localStorage.getItem("token")}` },
         }
       );
+      console.log(response.data)
       if (response.data) {
 
         toast.success("Url updated successfully");
@@ -191,7 +232,7 @@ const Linkpage = () => {
   // deleting the url 
   const deleteUrl = async () => {
     try {
-      await axios.delete(`http://localhost:4000/api/url/deleteLink/${deleteId}`,
+      await axios.delete(`${apiUrl}/api/url/deleteLink/${deleteId}`,
         {
           headers: { Authorization: `${localStorage.getItem("token")}` },
         });
@@ -218,6 +259,7 @@ const Linkpage = () => {
     setExpirationEnabled(false);
     setexpiryDate(null);
     setSelectedDate(new Date());
+    setShowDatePicker(false);
   };
 
 
@@ -389,7 +431,7 @@ const Linkpage = () => {
                               handleDateChange(date);
                               setShowDatePicker(false);
                             }}
-                            // showTimeSelect
+                            showTimeSelect
                             dateFormat="Pp"
                             minDate={new Date()}
                             block
@@ -416,7 +458,7 @@ const Linkpage = () => {
               </div>
             </div>
             </div>
-          )};
+          )}
     </>
   )
 };

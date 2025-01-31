@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import logo from '../../assets/logo.svg';
 
 const Login = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
 
     // uesState for login form
@@ -26,7 +27,7 @@ const Login = () => {
 
         // sending the loginform data to the backend
         try {
-            const response = await axios.post('http://localhost:4000/api/user/login', loginForm);
+            const response = await axios.post(`${apiUrl}/api/user/login`, loginForm);
 
             if (response.status === 200) {
                 setLoginForm({
@@ -36,7 +37,7 @@ const Login = () => {
                 
                 toast.success('User logged in successfully')
                 localStorage.setItem('token', response.data.token);
-                navigate('/mainpage')
+                navigate('/mainpage/dashboard')
             }
             else {
                 console.log(response.data)
@@ -55,7 +56,7 @@ const Login = () => {
         const token = localStorage.getItem('token');
         if(token){
           toast.success("User Already Logged In");
-          navigate('/mainpage')
+          navigate('/mainpage/dashboard')
         }
       },[])
 

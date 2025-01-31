@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const { toggleCreateForm } = useAppContext();
     const [showLogout, setShowLogout] = useState(false);
     const [userName, setUserName] = useState("");
@@ -22,7 +23,7 @@ const Navbar = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/user/getusers',
+            const response = await axios.get(`${apiUrl}/api/user/getusers`,
                 {
                     headers: { Authorization: `${localStorage.getItem("token")}` },
                 });

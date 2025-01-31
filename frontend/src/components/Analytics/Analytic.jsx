@@ -4,7 +4,7 @@ import style from './Analytic.module.css'
 
 
 const Analytic = () => {
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [analyticData, setAnalyticData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -16,7 +16,7 @@ const Analytic = () => {
 
   const AnalyticUrl = async (page = 1) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/url/analytics?page=${page}&limit=7`, {
+      const response = await axios.get(`${apiUrl}/api/url/analytics?page=${page}&limit=7`, {
         headers: { Authorization: `${localStorage.getItem("token")}` },
       });
       console.log(response.data)
@@ -37,6 +37,7 @@ const Analytic = () => {
 
   return (
     <>
+    {analyticData.length > 0 ?(
       <div className={style.container}>
         <div className={style.linksContainer}>
           <table className={style.tableContainer}>
@@ -96,6 +97,8 @@ const Analytic = () => {
           </button>
         </div>
       </div>
+    ):(<p>No Data Links available</p>)}
+      
     </>
   )
 }

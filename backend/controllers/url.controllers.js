@@ -1,6 +1,7 @@
 const UrlSchema = require('../schema/url.schema');
-
-const shortid = require("shortid")
+const moment = require("moment"); // To manage dates
+const shortid = require("shortid");
+const cron = require('node-cron');
 
 exports.shortenUrl = async (req, res) => {
 
@@ -16,7 +17,7 @@ exports.shortenUrl = async (req, res) => {
 
   try {
     // Check if the original URL already exists in the database
-    let url = await UrlSchema.findOne({ destinationUrl });
+    let url = await UrlSchema.findOne({ destinationUrl, userID });
     if (url) {
       // If the URL exists, return the existing shortened URL
       return res.json(url);
@@ -25,9 +26,14 @@ exports.shortenUrl = async (req, res) => {
       const shortUrl = `${baseUrl}/${urlCode}`;
 
       // Handle expiration date if provided
+      let status = "Active";
       let expiration = null;
       if (expiryDate) {
         expiration = new Date(expiryDate);
+        // Check if the expiration date is in the past
+        if (moment(expiration).isBefore(moment())) {
+          status = "Inactive";
+        }
       }
 
       // Save the new URL to the database
@@ -37,8 +43,11 @@ exports.shortenUrl = async (req, res) => {
         urlCode,
         remarks,
         userID,
-        status: "Active",
+        status,
         expiryDate: expiration,
+        clickCount:0,
+        dailyClickCounts: [],
+        deviceDetails: []
       });
 
       await url.save();
@@ -66,31 +75,40 @@ exports.redirectUrl = async (req, res) => {
       return res.status(404).json('No URL found');
     }
 
-    // Increment the clickCount by 1
-   urlData.clickCount += 1;
-
-    // Get today's date in "YYYY-MM-DD" format
-    const today = new Date().toISOString().split("T")[0];
-
-    // Check if there's already a record for today
-    const todayClickData = urlData.dailyClickCounts.find((data) => data.date === today);
-
-    if (todayClickData) {
-      // Increment the click count for today
-      todayClickData.count += 1;
-    } else {
-      // Add a new entry for today's date
-      urlData.dailyClickCounts.push({
-        date: today,
-        count: 1,
+    // Check if URL has expired
+    if (urlData.expiryDate && moment().isAfter(urlData.expiryDate)) {
+      // Update status to Inactive if it hasn't been updated yet
+      if (urlData.status !== "Inactive") {
+        urlData.status = "Inactive";
+        await urlData.save();
+      }
+      return res.status(410).json({ 
+        message: "This link has expired", 
+        expiryDate: urlData.expiryDate 
       });
     }
 
-    // Ensure cumulative addition of today's count to the previous day's count
-    urlData.dailyClickCounts.sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort by date
-    for (let i = 1; i < urlData.dailyClickCounts.length; i++) {
-      urlData.dailyClickCounts[i].count += urlData.dailyClickCounts[i - 1].count;
+    // If URL is manually set to Inactive
+    if (urlData.status === "Inactive") {
+      return res.status(410).json({ 
+        message: "This link is inactive"
+      });
     }
+
+    // Increment the clickCount by 1
+   urlData.clickCount += 1;
+
+   const today = moment().format("YYYY-MM-DD");
+   const existingDayRecord = urlData.dailyClickCounts.find(
+     (day) => day.date === today
+   );
+
+   if (existingDayRecord) {
+     existingDayRecord.count += 1;
+   } else {
+     urlData.dailyClickCounts.push({ date: today, count: 1 });
+   }
+
     // --------------------------- 
 
     // Extract device type and IP address
@@ -147,28 +165,31 @@ exports.getLinkById = async (req, res) => {
 exports.updateLink = async (req, res) => {
   try {
     const { id } = req.params;
-
     // Build an object containing only the fields the user wants to update
-    const updateData = {};
-    if (req.body.destinationUrl !== undefined) {
-      updateData.destinationUrl = req.body.destinationUrl;
-    }
-    if (req.body.remarks !== undefined) {
-      updateData.remarks = req.body.remarks;
-    }
-    if (req.body.linkExpiration !== undefined) {
-      updateData.linkExpiration = req.body.linkExpiration;
+    const { destinationUrl, remarks, expiryDate } = req.body;
 
-      // If linkExpiration.enabled is false, remove expiryDate
-      if (req.body.linkExpiration.enabled === false) {
-        updateData.linkExpiration.expiryDate = undefined; // Clear expiryDate
+    
+    // Determine status based on expiration date
+    let status = "Active";
+    if (expiryDate) {
+      if (moment(expiryDate).isBefore(moment())) {
+        status = "Inactive";
       }
     }
 
-    const updatedLink = await UrlSchema.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedLink = await UrlSchema.findByIdAndUpdate(
+      id, 
+      {
+        destinationUrl,
+        remarks,
+        expiryDate,
+        status,
+        $set:{
+            lastUpdated: new Date()
+        }
+      },
+     { new: true}
+    );
 
     if (!updatedLink) {
       return res.status(404).json({ error: "Link not found" });
@@ -308,4 +329,25 @@ exports.getInfo = async (req, res) => {
   }
 };
 
+// expiry date
+const updateExpiredUrls = async () => {
+  try {
+    const now = new Date();
+    const result = await UrlSchema.updateMany(
+      {
+        expiryDate: { $lt: now },
+        status: 'Active'
+      },
+      {
+        $set: { status: 'Inactive' }
+      }
+    );
+    // console.log(`Updated ${result.modifiedCount} expired URLs`);
+  } catch (error) {
+    console.error('Error updating expired URLs:', error);
+  }
+};
+
+// Run every minute
+cron.schedule('* * * * *', updateExpiredUrls);
 

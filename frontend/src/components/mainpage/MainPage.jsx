@@ -14,7 +14,7 @@ const MainPage = () => {
                 {/* Sidebar */}
                 <div className={style.sideBar}>
                     <div className={style.dashboard}>
-
+                        <i className="fa-solid fa-house"></i>
                         <p onClick={() => navigate('dashboard')}>Dashboard</p>
                     </div>
                     <div className={style.link}>
