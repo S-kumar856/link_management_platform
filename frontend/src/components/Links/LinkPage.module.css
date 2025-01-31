@@ -274,6 +274,8 @@ td {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  /* top: 12vh; */
   margin-top: 12vh;
   background-color: #3b3c511a;
   border-bottom-left-radius: 12px;
@@ -497,5 +499,39 @@ input:checked + .slider:before {
 @media screen and (max-width: 575px) {
   .tableContainer{
     width: 100%;
+    overflow: hidden;
+    
+  }
+
+  /* create model */
+  .createLinkModel{
+    width: 75%;
+    height: 80%;
+    /* position: relative; */
+  }
+  .createUrl_Btns{
+    position: relative;
+    top: -10vh;
+
+  }
+  /* delete model */
+  .delete_model{
+    width: 75%;
+  }
+  .deleteModel_Btns{
+    display: flex;
+    gap: 3vw;
+  }
+  .deleteModel_Btns button {
+    padding: 1vh 10vw;
+    font-size: 0.9rem;
+}
+
+  /* pagination */
+  .pagination{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

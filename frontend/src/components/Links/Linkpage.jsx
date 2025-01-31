@@ -5,7 +5,7 @@ import { useAppContext } from '../../components/AppContext';
 import DatePicker from "react-datepicker";
 import { FiCalendar } from "react-icons/fi";
 import "react-datepicker/dist/react-datepicker.css";
-import style from './Linkpage.module.css';
+import style from './LinkPage.module.css';
 
 
 const Linkpage = () => {
@@ -267,7 +267,11 @@ const Linkpage = () => {
   const handleCopy = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("Link copied successfully!");
+      toast.success("Link copied successfully!", 
+        { position: "bottom-left",
+          style: { backgroundColor: "white", color: "black" },
+          iconTheme: { primary: "green" }
+         });
     } catch (error) {
       toast.error("Failed to copy link", error);
     }
@@ -446,7 +450,7 @@ const Linkpage = () => {
 
                 <div className={style.createUrl_Btns}>
                   <div>
-                    <div className={style.clearBtn} onClick={resetForm}>Clear</div>
+                    <p className={style.clearBtn} onClick={resetForm}>Clear</p>
                   </div>
                   <div>
                     <button className={style.createBtn} type='submit'> {isEditing ? 'Save' : 'Create new'}</button>

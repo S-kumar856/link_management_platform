@@ -1,124 +1,170 @@
-.Navbar{
-    display: flex;
-    padding-top:1vw;
-    padding-left: 1vw;
-    gap: 10vw;
-    font-family:Manrope;
-    height: 10vh;
+.Navbar {
+  display: flex;
+  padding-top: 1vw;
+  padding-left: 1vw;
+  gap: 5vw;
+  font-family: Manrope;
+  height: 10vh;
 }
 
-.right_navbar{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    /* background-color: red; */
-    /* gap: 28vw; */
-    border-bottom: 1px solid #ECECF2;
-    padding-bottom: 10px;
+.right_navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ececf2;
+  padding-bottom: 10px;
 }
-.profile_name{
-    display: flex;
+.profile_name {
+  display: flex;
 }
-.profile_name span{
-    font-size: 1.2rem;
-    font-weight: 700;
+.profile_name span {
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
-.profile_name p{
-    font-size: 0.8rem;
-    color: #878BA9;
+.profile_name p {
+  font-size: 0.8rem;
+  color: #878ba9;
 }
 
-.Nav_Acton{
-    display: flex;
-    position: relative;
-    gap: 28px;
+.Nav_Acton {
+  display: flex;
+  position: relative;
+  gap: 28px;
 }
-.create_button{
-    background-color: #1B48DA;
-    padding: 10px 14px;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    color: #FFFFFF;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.create_button:hover{
-    background-color: #6481df;
+.create_button {
+  background-color: #1b48da;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.Nav_search{
-    padding: 13px 14px;
-    margin-right: 7vw;  
-    border-radius: 6px;
-    text-align: center;
-    font-size: 1rem;
-    outline: none;
-    border: 1px solid #ECECF2;
-    font-weight: 400;
-
+.create_button:hover {
+  background-color: #6481df;
 }
 
-.search{
-    position: relative;;
-    color: #878BA9;
+.Nav_search {
+  padding: 13px 14px;
+  margin-right: 7vw;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1rem;
+  outline: none;
+  border: 1px solid #ececf2;
+  font-weight: 400;
 }
 
-.search i{
-    position: absolute;
-    top: 2.2vh;
-    padding-left: 1vw;
-    font-size: 1.2rem;
+.search {
+  position: relative;
+  color: #878ba9;
 }
 
-.profile_circle{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #FDE48A;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-    color: #923E0E;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.3s;
+.search i {
+  position: absolute;
+  top: 2.2vh;
+  padding-left: 1vw;
+  font-size: 1.2rem;
 }
 
-.profile_circle:hover{
-    transform: scale(1.25);
+.profile_circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #fde48a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  color: #923e0e;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.logoutDiv{
-    position: absolute;
-    top: 6vh;
-    left: 27vw;
-    width: 3vw;
+.profile_circle:hover {
+  transform: scale(1.25);
 }
 
-.logoutBtn{
-    border: 1px solid #ececf2;
-    color: #878ba9;
-    font-family: Manrope;
-    font-size: 1rem;
-    font-weight: 400;
-    background-color: #ffffff;
-    padding: 8px 22px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.logoutBtn:hover{
-    background-color: #3B3C51;
-    color: #FFFFFF;
+.logoutDiv {
+  position: absolute;
+  top: 6vh;
+  left: 27vw;
+  width: 3vw;
 }
 
-  
+.logoutBtn {
+  border: 1px solid #ececf2;
+  color: #878ba9;
+  font-family: Manrope;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: #ffffff;
+  padding: 8px 22px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.logoutBtn:hover {
+  background-color: #3b3c51;
+  color: #ffffff;
+}
 
- 
+/* media query */
 
+@media screen and (max-width: 576px){
+    .Navbar{
+        flex-direction: column;
+        height: 23vh;
+        gap: 3px;
+    }
+
+    .Logo{
+        text-align: center;
+    }
+    .Logo img{
+        width: 100px;
+    }
+
+    .right_navbar{
+        width: 100%;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .Nav_Acton{
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    .profile_name{
+        margin-bottom: 10px;
+    }
+
+    .logoutDiv{
+     
+        top: 10vh;
+        left: 75vw;
+       
+    }
+    .create_button{
+        background-color: #1B48DA;
+        padding: 5px;
+        width: 22vw;
+        border-radius: 6px;
+        border: none;
+        outline: none;
+        color: #FFFFFF;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+}
