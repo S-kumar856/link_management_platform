@@ -10,8 +10,8 @@ import style from './LinkPage.module.css';
 
 const Linkpage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-
   const [linkpageLinks, setLinkpageLinks] = useState([])
+
 
   // usestate for date and time handle
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -32,8 +32,6 @@ const Linkpage = () => {
     remarks: "",
     expiryDate: null,
   });
-
-  // ------------------------------------------------------------
 
   const isUrlExpired = useCallback((expiryDate) => {
     if (!expiryDate) return false;
@@ -57,9 +55,8 @@ const Linkpage = () => {
         expiryDate: null
       }));
     } else {
-      // Set default expiration to selected date when enabling
       const defaultDate = new Date();
-      defaultDate.setHours(defaultDate.getHours() + 24); // Set default to 24 hours from now
+      defaultDate.setHours(defaultDate.getHours() + 24);
       setexpiryDate(defaultDate);
       setSelectedDate(defaultDate);
       setCreateUrl(prev => ({
@@ -68,6 +65,7 @@ const Linkpage = () => {
       }));
     }
   };
+
 
   // Modify your existing date change handler
   const handleDateChange = (date) => {
@@ -81,12 +79,11 @@ const Linkpage = () => {
       }));
     }
   }
-  // -----------------------------------
+
   // search filter function
   const filteredRemarks = linkpageLinks.filter((item) =>
     item.remarks?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   const handleCreateUrl = (e) => {
     const { name, value } = e.target;
     setCreateUrl({ ...createUrl, [name]: value })
@@ -95,10 +92,11 @@ const Linkpage = () => {
 
   useEffect(() => {
     getUrl(currentPage);
-    // Set up periodic refresh
+  
     const interval = setInterval(getUrl, 60000); // Refresh every minute
     return () => clearInterval(interval);
   }, [currentPage])
+
 
   // fecthing the url from the backend  
   const getUrl = async (page = 1) => {
@@ -119,6 +117,7 @@ const Linkpage = () => {
       console.log(error)
     }
   }
+
   // pagination
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -152,7 +151,6 @@ const Linkpage = () => {
     } catch (error) {
       console.log("error in creating url:", error)
       toast.error("error in creating url");
-      // setShowCreateForm(false)
     }
 
   };
@@ -267,11 +265,12 @@ const Linkpage = () => {
   const handleCopy = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("Link copied successfully!", 
-        { position: "bottom-left",
+      toast.success("Link copied successfully!",
+        {
+          position: "bottom-left",
           style: { backgroundColor: "white", color: "black" },
           iconTheme: { primary: "green" }
-         });
+        });
     } catch (error) {
       toast.error("Failed to copy link", error);
     }
@@ -312,7 +311,7 @@ const Linkpage = () => {
                       <div className={style.short}>
                         {remark.shortUrl}
                       </div>
-                      <span className={style.copyIcon} onClick={() => handleCopy(remark.shortUrl)}>📋</span>
+                      <span className={style.copyIcon} onClick={() => handleCopy(remark.shortUrl)}><i className="fa-regular fa-copy"></i></span>
                     </td>
                     <td className={style.remark}>{remark.remarks}</td>
                     <td className={style.clicks}>{remark.clickCount}</td>
