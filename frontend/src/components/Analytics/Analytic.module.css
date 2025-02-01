@@ -116,5 +116,29 @@ td {
 
 
 @media screen and (max-width: 575px) {
+  .container {
+    margin-left: 30vw;
+  }
+  .tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    min-height: 50vh;
+  }
+  .status{
+    width: 30vw;
+  }
+
+  /* Table adjustments */
+  .tableHeader th {
+    padding: 8px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .tableRow td {
+    padding: 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
   
   }

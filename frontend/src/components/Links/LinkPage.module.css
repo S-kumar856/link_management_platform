@@ -497,11 +497,42 @@ input:checked + .slider:before {
 
 
 @media screen and (max-width: 575px) {
-  .tableContainer{
-    width: 100%;
-    overflow: hidden; 
+  .container {
+    margin-left: 30vw;
   }
-  
+
+  .tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    min-height: 50vh;
+  }
+  .status{
+    width: 32vw;
+    height: 11vh;  
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+  }
+
+  /* Table adjustments */
+  .tableHeader th {
+    padding: 8px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .tableRow td {
+    padding: 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .shortEdit{
+    height: 11vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+ 
   /* create model */
   .createLinkModel{
     width: 80%;
@@ -541,7 +572,11 @@ input:checked + .slider:before {
   .pagination{
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    /* justify-content: center;  */
   }
+}
+
+
+@media screen and (max-width: 768px) {
 }

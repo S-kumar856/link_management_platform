@@ -1,11 +1,17 @@
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar'
 import style from './MainPage.module.css'
 
 const MainPage = () => {
     const navigate = useNavigate();
-    
+    const [activeItem, setActiveItem] = useState('dashboard');
+
+    const handleNavigation = (route) => {
+        setActiveItem(route);
+        navigate(route);
+    };
+
     return (
         <div className={style.MainPage}>
             <Navbar />
@@ -13,22 +19,42 @@ const MainPage = () => {
             <div className={style.sidebar_parent}>
                 {/* Sidebar */}
                 <div className={style.sideBar}>
-                    <div className={style.dashboard}>
+                    <div className={style.dashboard}
+                        onClick={() => handleNavigation('dashboard')}
+                        style={{
+                            backgroundColor: activeItem === 'dashboard' ? '#F3F7FD' : 'transparent'
+                        }}
+                    >
                         <i className="fa-solid fa-house"></i>
-                        <p onClick={() => navigate('dashboard')}>Dashboard</p>
+                        <p>Dashboard</p>
                     </div>
-                    <div className={style.link}>
+                    <div className={style.link}
+                        onClick={() => handleNavigation('link')}
+                        style={{
+                            backgroundColor: activeItem === 'link' ? '#F3F7FD' : 'transparent'
+                        }}
+                    >
                         <i className="fa-solid fa-link"></i>
-                        <p onClick={() => navigate('link')}>Links</p>
+                        <p>Links</p>
                     </div>
-                    <div className={style.analytics}>
+                    <div className={style.analytics}
+                        onClick={() => handleNavigation('analytic')}
+                        style={{
+                            backgroundColor: activeItem === 'analytic' ? '#F3F7FD' : 'transparent'
+                        }}
+                    >
                         <i className="fa-solid fa-arrow-trend-up"></i>
-                        <p onClick={() => navigate('analytic')}>Analytics</p>
+                        <p>Analytics</p>
                     </div>
 
-                    <div className={style.setting} >
+                    <div className={style.setting}
+                        onClick={() => handleNavigation('setting')}
+                        style={{
+                            backgroundColor: activeItem === 'setting' ? '#F3F7FD' : 'transparent'
+                        }}
+                    >
                         <i className="fa-solid fa-gear"></i>
-                        <p onClick={()=>navigate('setting')}>Settings</p>
+                        <p>Settings</p>
                     </div>
                 </div>
 
