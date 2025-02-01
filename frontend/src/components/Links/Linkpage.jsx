@@ -399,7 +399,7 @@ const Linkpage = () => {
 
                   </div>
                   <div className={style.Urlinput}>
-                    <label htmlFor="remarks">Remarks <span>*</span></label> <br />
+                    <label htmlFor="remarks">Remarks <span>*</span></label>
                     <textarea name="remarks" id="remarks" value={createUrl.remarks} onChange={handleCreateUrl} placeholder='Add remarks' required>Add remarks</textarea>
                   </div>
 

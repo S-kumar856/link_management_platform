@@ -275,8 +275,8 @@ td {
   justify-content: space-between;
   align-items: center;
   position: relative;
-  /* top: 12vh; */
-  margin-top: 12vh;
+ 
+  margin-top: 15.5vh;
   background-color: #3b3c511a;
   border-bottom-left-radius: 12px;
   padding: 10px;
@@ -499,21 +499,31 @@ input:checked + .slider:before {
 @media screen and (max-width: 575px) {
   .tableContainer{
     width: 100%;
-    overflow: hidden;
-    
+    overflow: hidden; 
   }
-
+  
   /* create model */
   .createLinkModel{
-    width: 75%;
-    height: 80%;
-    /* position: relative; */
+    width: 80%;
+    height: 70%;
   }
   .createUrl_Btns{
     position: relative;
-    top: -10vh;
-
+    top: -13.5vh;
   }
+  .Urlinput textarea{
+    height: 10vh;
+  }
+
+  .createBtn{
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  .clearBtn{
+    font-size: 0.8rem;
+  }
+  
+
   /* delete model */
   .delete_model{
     width: 75%;

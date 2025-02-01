@@ -166,5 +166,27 @@
         cursor: pointer;
         transition: 0.3s;
     }
+    .Nav_search {
+      padding: 11px 10px;
+      font-size: 0.8rem;
+    }
+
+    .search i{
+      position: absolute;
+      font-size: 0.9rem;
+      top: 13px;
+      left: 5px;
+    }
+    .logoutDiv{
+      position: absolute;
+      top: 5vh;
+      left: 55vw;
+      width: 2vw;
+    }
+    .logoutBtn:hover {
+      background-color: #3b3c51;
+      color: #ffffff;
+    }
+
     
 }
