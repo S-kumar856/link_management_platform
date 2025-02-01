@@ -1,4 +1,4 @@
-#TrimLink
+##TrimLink
 
 
 A simple and efficient URL Shortener built with React (Frontend) and Node.js/Express (Backend) to generate, manage, and track short URLs.
@@ -35,7 +35,7 @@ Make sure you have the following installed:
 ### Clone the Repository
 
 ```sh
-git clone https://github.com/Manibingi/url-shortener.git
+git clone https://github.com/S-kumar856/link_management_platform.git
 cd link-management-platform
 ```
 
