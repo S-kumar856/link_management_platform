@@ -1,4 +1,4 @@
-##TrimLink
+## TrimLink
 
 
 A simple and efficient URL Shortener built with React (Frontend) and Node.js/Express (Backend) to generate, manage, and track short URLs.
