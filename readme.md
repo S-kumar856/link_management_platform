@@ -112,4 +112,4 @@ Feel free to contribute to this project! Follow these steps:
 ![Alt text](images/image3.png)
 ![Alt text](images/image4.png)
 
-**Happy Coding! 🚀**
+**Happy Coding! 
